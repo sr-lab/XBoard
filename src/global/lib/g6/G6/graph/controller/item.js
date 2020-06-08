@@ -29,7 +29,7 @@ class ItemController {
         model[cfg] = val;
       });
     } else if (defaultModel) {
-      // 很多布局会直接修改原数据模型，所以不能用 merge 的形式，逐个写入原 model 中
+      // Many layouts will directly modify the original data model, so you cannot use the form of merge to write into the original model one by one
       Util.each(defaultModel, (val, cfg) => {
         if (!hasOwnProperty.call(model, cfg)) {
           if (Util.isObject(val)) {
@@ -83,7 +83,7 @@ class ItemController {
     if (!item || item.destroyed) {
       return;
     }
-    // 如果修改了与映射属性有关的数据项，映射的属性相应也需要变化
+    // If the data items related to the mapped attributes are modified, the mapped attributes need to be changed accordingly
     const mapper = graph.get(item.getType() + MAPPER_SUFFIX);
     if (mapper) {
       const newModel = Util.mix({}, item.getModel(), cfg);
@@ -98,7 +98,7 @@ class ItemController {
     }
     graph.emit('beforeupdateitem', { item, cfg });
     if (item.getType() === EDGE) {
-      // 若是边要更新source || target, 为了不影响示例内部model，并且重新计算startPoint和endPoint，手动设置
+      // If you want to update source || target, in order not to affect the internal model of the example, and recalculate startPoint and endPoint, manually set
       if (cfg.source) {
         let source = cfg.source;
         if (Util.isString(source)) {
@@ -141,7 +141,7 @@ class ItemController {
     items.splice(index, 1);
     delete graph.get('itemMap')[item.get('id')];
     if (type === NODE) {
-      // 若移除的是节点，需要将与之相连的边一同删除
+      // If you are removing a node, you need to delete the edges connected to it
       const edges = item.getEdges();
       for (let i = edges.length; i >= 0; i--) {
         graph.removeItem(edges[i]);
@@ -193,8 +193,8 @@ class ItemController {
       const autoPaint = graph.get('autoPaint');
       graph.setAutoPaint(false);
       Util.each(item.getEdges(), edge => {
-        // 若隐藏节点，则将与之关联的边也隐藏
-        // 若显示节点，则将与之关联的边也显示，但是需要判断边两端的节点都是可见的
+        // If the node is hidden, the associated edge is also hidden
+        // If a node is displayed, the associated edge will also be displayed, but it is necessary to determine that the nodes at both ends of the edge are visible
         if (visible && (!(edge.get('source').isVisible() && edge.get('target').isVisible()))) {
           return;
         }

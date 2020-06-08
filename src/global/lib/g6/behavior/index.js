@@ -4,14 +4,16 @@
  * 注册交互
  */
 
-// 单独画线交互
+
+// Separate line drawing interaction
 // import drawLine from './drawLine'
-// 单独拖拽交互
+// Separate drag and drop interaction
 // import dragNodeToEditor from './dragNodeToEditor'
-// 单独图形控制交互
+// Separate graphical control interaction
 // import shapeControl from './shapeControl'
 
-// 综合节点控制交互
+
+// Integrated node control interaction
 import nodeControl from './nodeControl'
 
 const obj = {

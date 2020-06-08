@@ -19,21 +19,21 @@ module.exports = {
     return splinePath;
   },
   /**
-   * 根据起始点、相对位置、偏移量计算控制点
-   * @param  {Object} startPoint 起始点，包含 x,y
-   * @param  {Object} endPoint  结束点, 包含 x,y
-   * @param  {Number} percent   相对位置,范围 0-1
-   * @param  {Number} offset    偏移量
-   * @return {Object} 控制点，包含 x,y
+   * Calculate the control point according to the starting point, relative position and offset
+   * @param {Object} startPoint Start point, including x,y
+   * @param {Object} endPoint End point, including x,y
+   * @param {Number} percent relative position, range 0-1
+   * @param {Number} offset
+   * @return {Object} control point, including x,y
    */
   getControlPoint(startPoint, endPoint, percent, offset) {
     const point = {
       x: (1 - percent) * startPoint.x + percent * endPoint.x,
       y: (1 - percent) * startPoint.y + percent * endPoint.y
     };
-    const tangent = []; // 类似于 C 语言的写法，真难用
+    const tangent = []; // Similar to the C language, it is really difficult to use
     vec2.normalize(tangent, [ endPoint.x - startPoint.x, endPoint.y - startPoint.y ]);
-    const perpendicular = [ -tangent[1] * offset, tangent[0] * offset ];  // 垂直向量
+    const perpendicular = [ -tangent[1] * offset, tangent[0] * offset ];  // Vertical vector
     point.x += perpendicular[0];
     point.y += perpendicular[1];
     return point;

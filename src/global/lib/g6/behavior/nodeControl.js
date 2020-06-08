@@ -14,13 +14,13 @@ export default {
     getDefaultCfg () {
       return {
         config: {
-          // 是否在拖拽节点时更新所有与之相连的边
+          // Whether to update all connected edges when dragging a node
           updateEdge: true,
-          // 是否支持在节点上添加文本
+          // Whether to support adding text on the node
           nodeLabel: true,
-          // 是否支持在边上添加文本
+          // Whether to support adding text on the side
           edgeLabel: true,
-          // tooltip 是否启用
+          // Whether tooltip is enabled
           tooltip: {
             shapeControl: true,
             dragNode: true
@@ -44,7 +44,7 @@ export default {
     },
     startAddNode (node) {
       let _t = this
-      // 初始化数据
+      // Initialization data
       _t.info = {
         type: 'dragNode',
         node: node,
@@ -58,7 +58,7 @@ export default {
         type: 'node',
         model: event.item.getModel()
       })
-      // 初始化数据
+      // Initialization data
       _t.info = {
         type: null,
         node: event.item,
@@ -136,24 +136,24 @@ export default {
       start: function (event) {
         let _t = this
         let target
-        // 锚点数据
+        // Anchor point data
         let anchorPoints = _t.info.node.getAnchorPoints()
-        // 处理线条目标点
+        // Process line target points
         if (anchorPoints && anchorPoints.length) {
-          // 获取距离指定坐标最近的一个锚点
+          // Get the anchor point closest to the specified coordinate
           target = _t.info.node.getLinkPoint({ x: event.x, y: event.y })
         } else {
           target = _t.info.node
         }
         _t.drawLine.currentLine = _t.graph.addItem('edge', {
-          // 起始节点
+          // start node
           source: target,
-          // 终止节点/位置
+          // Terminate node/location
           target: {
             x: event.x,
             y: event.y
           },
-          // FIXME label 需支持双击编辑
+          // FIXME label needs to support double-click editing
           label: '',
           attrs: {},
           style: {
@@ -161,7 +161,7 @@ export default {
             lineWidth: _t.graph.$X.lineWidth,
             ...config.line.type[_t.graph.$X.lineStyle]
           },
-          // FIXME 边的形式需要与工具栏联动
+          // FIXME The form of the edge needs to be linked with the toolbar
           shape: _t.graph.$X.lineType || 'line',
           startArrow: _t.graph.$X.startArrow || false,
           endArrow: _t.graph.$X.endArrow || false
@@ -183,25 +183,25 @@ export default {
         let _t = this
         if (_t.drawLine.isMoving) {
           if (_t.drawLine.currentLine === event.item) {
-            // 画线过程中点击则移除当前画线
+            // Click on the line drawing process to remove the current line drawing
             _t.graph.removeItem(event.item)
           } else {
             let endNode = event.item
             let startModel = _t.info.node.getModel()
             let endModel = endNode.getModel()
             let target
-            // 锚点数据
+            // Anchor data
             let anchorPoints = endNode.getAnchorPoints()
-            // 处理线条目标点
+            // Processing line target points
             if (anchorPoints && anchorPoints.length) {
-              // 获取距离指定坐标最近的一个锚点
+              // Get the anchor point closest to the specified coordinates
               target = endNode.getLinkPoint({ x: event.x, y: event.y })
             } else {
               target = endNode
             }
             _t.graph.updateItem(_t.drawLine.currentLine, {
               target: target,
-              // 存储起始点ID，用于拖拽节点时更新线条
+              // Store the starting point ID, used to update the line when dragging the node
               attrs: {
                 start: startModel.id,
                 end: endModel.id
@@ -237,7 +237,7 @@ export default {
         let _t = this
         if (_t.info.node && _t.info.target && _t.shapeControl.startPoint && _t.shapeControl.isMoving) {
           let model = _t.info.node.getModel()
-          // 判断位置
+          // Determine location
           let targetAttrs = _t.info.target._attrs
           let position = targetAttrs.position
           let attrs = {
@@ -248,7 +248,7 @@ export default {
           let width = model.width
           let height = model.height
           if (position) {
-            // 参照点，及当前controller的对角点
+            // Reference point, and the diagonal point of the current controller
             let referencePoint = {}
             if (position.x === 0) {
               if (position.y === 0) {
@@ -256,10 +256,10 @@ export default {
                   x: _t.shapeControl.startPoint.x + width / 2,
                   y: _t.shapeControl.startPoint.y + height / 2
                 }
-                // 计算宽、高
+                // Calculate width and height
                 attrs.size[0] = Math.abs(referencePoint.x - event.x)
                 attrs.size[1] = Math.abs(referencePoint.y - event.y)
-                // 计算中心点坐标
+                // Calculate the coordinates of the center point
                 attrs.x = event.x + attrs.size[0] / 2
                 attrs.y = event.y + attrs.size[1] / 2
                 if (
@@ -275,10 +275,10 @@ export default {
                   x: _t.shapeControl.startPoint.x + width / 2,
                   y: _t.shapeControl.startPoint.y - height / 2
                 }
-                // 计算宽、高
+                // Calculate width and height
                 attrs.size[0] = Math.abs(referencePoint.x - event.x)
                 attrs.size[1] = Math.abs(referencePoint.y - event.y)
-                // 计算中心点坐标
+                // Calculate the coordinates of the center point
                 attrs.x = event.x + attrs.size[0] / 2
                 attrs.y = event.y - attrs.size[1] / 2
                 if (
@@ -296,10 +296,10 @@ export default {
                   x: _t.shapeControl.startPoint.x - width / 2,
                   y: _t.shapeControl.startPoint.y + height / 2
                 }
-                // 计算宽、高
+                // Calculate width and height
                 attrs.size[0] = Math.abs(referencePoint.x - event.x)
                 attrs.size[1] = Math.abs(referencePoint.y - event.y)
-                // 计算中心点坐标
+                // Calculate the coordinates of the center point
                 attrs.x = event.x - attrs.size[0] / 2
                 attrs.y = event.y + attrs.size[1] / 2
                 if (
@@ -315,10 +315,10 @@ export default {
                   x: _t.shapeControl.startPoint.x - width / 2,
                   y: _t.shapeControl.startPoint.y - height / 2
                 }
-                // 计算宽、高
+                // Calculate width and height
                 attrs.size[0] = Math.abs(referencePoint.x - event.x)
                 attrs.size[1] = Math.abs(referencePoint.y - event.y)
-                // 计算中心点坐标
+                // Calculate the coordinates of the center point
                 attrs.x = event.x - attrs.size[0] / 2
                 attrs.y = event.y - attrs.size[1] / 2
                 if (
@@ -343,24 +343,24 @@ export default {
               top: attrs.y + attrs.size[1] / 2
             }, `X: ${attrs.x.toFixed(2)} Y: ${attrs.y.toFixed(2)}<br>W: ${attrs.size[0].toFixed(2)} H: ${attrs.size[1].toFixed(2)}`)
           }
-          // 当前节点容器
+          // Current node container
           let group = _t.info.node.getContainer()
-          // 更新锚点
+          // Update anchor
           utils.updateAnchor({
             ..._t.info.node.getModel(),
             width: attrs.size[0],
             height: attrs.size[1]
           }, group)
-          // 更新shapeControl
+          // Update shapeControl
           utils.updateShapeControl({
             ..._t.info.node.getModel(),
             width: attrs.size[0],
             height: attrs.size[1]
           }, group)
-          // 更新节点
+          // Update node
           _t.graph.updateItem(_t.info.node, attrs)
           if (_t.config.updateEdge) {
-            // 更新线条
+            // Update line
             utils.updateLine(_t.info.node, _t.graph)
           }
         }
@@ -369,21 +369,21 @@ export default {
         let _t = this
         if (_t.info.node && _t.info.attrs && _t.shapeControl.startPoint && _t.shapeControl.isMoving) {
           let attrs = _t.info.attrs
-          // 当前节点容器
+          // Current node container
           let group = _t.info.node.getContainer()
-          // 更新锚点
+          // Update anchor
           utils.updateAnchor({
             ..._t.info.node.getModel(),
             width: attrs.size[0],
             height: attrs.size[1]
           }, group)
-          // 更新shapeControl
+          // Update shapeControl
           utils.updateShapeControl({
             ..._t.info.node.getModel(),
             width: attrs.size[0],
             height: attrs.size[1]
           }, group)
-          // 更新节点
+          // Update node
           _t.graph.updateItem(_t.info.node, attrs)
         }
         if (_t.config.tooltip.shapeControl) {
@@ -397,7 +397,7 @@ export default {
     dragNode: {
       dottedNode: null,
       status: null,
-      // 虚线框节点样式
+      // Dotted frame node style
       dottedNodeStyle: {
         ...config.dottedNode.style.default
       },
@@ -492,10 +492,10 @@ export default {
               //   lineWidth: _t.graph.$X.lineWidth
               // }
             }
-            // 更新节点
+            // Update node
             _t.graph.updateItem(_t.info.node, attrs)
             if (_t.config.updateEdge) {
-              // 更新线条
+              // Update line
               utils.updateLine(_t.info.node, _t.graph)
             }
             if (_t.config.tooltip.dragNode) {
@@ -527,7 +527,7 @@ export default {
       }
     },
     nodeLabel: {
-      // 节点文本创建
+      // Node text creation
       create (event) {
         let _t = this
         let canvas = _t.graph.get('canvas')
@@ -536,12 +536,12 @@ export default {
         const el = canvas.get('el')
         const html = G6.Util.createDom(`<input id="${id}" class="node-label" autofocus value="${label}"></input>`)
         if (html) {
-          // 插入输入框dom
+          // Insert the input box dom
           el.parentNode.appendChild(html)
           if (html.focus) {
             html.focus()
           }
-          // 更新输入框样式
+          // Update input box style
           G6.Util.modifyCSS(html, {
             display: 'inline-block',
             position: 'absolute',
@@ -555,7 +555,7 @@ export default {
             fontSize: '14px'
           })
           html.addEventListener('blur', function () {
-            // 更新节点
+            // Update node
             _t.graph.updateItem(node, {
               label: html.value,
               labelCfg: {
@@ -565,14 +565,14 @@ export default {
                 }
               }
             })
-            // 删除输入框dom
+            // Delete input box dom
             el.parentNode.removeChild(html)
           })
         }
       }
     },
     edgeLabel: {
-      // 节点文本创建
+      // Node text creation
       create (event) {
         let _t = this
         let canvas = _t.graph.get('canvas')
@@ -591,7 +591,7 @@ export default {
         if (distance > maxWidth) {
           width = maxWidth
         }
-        // 计算输入框位置
+        // Calculate input box position
         if (source.x < target.x) {
           left = source.x + distance / 2 - width / 2 + 'px'
         } else {
@@ -605,12 +605,12 @@ export default {
         const el = canvas.get('el')
         const html = G6.Util.createDom(`<input id="${id}" class="edge-label" autofocus value="${label}"></input>`)
         if (html) {
-          // 插入输入框dom
+          // Insert the input box dom
           el.parentNode.appendChild(html)
           if (html.focus) {
             html.focus()
           }
-          // 更新输入框样式
+          // Update input box style
           G6.Util.modifyCSS(html, {
             display: 'inline-block',
             position: 'absolute',
@@ -624,7 +624,7 @@ export default {
             fontSize: '14px'
           })
           html.addEventListener('blur', function () {
-            // 更新节点
+            // Update node
             _t.graph.updateItem(edge, {
               label: html.value,
               labelCfg: {
@@ -635,7 +635,7 @@ export default {
                 }
               }
             })
-            // 删除输入框dom
+            // Delete input box dom
             el.parentNode.removeChild(html)
           })
         }
@@ -653,9 +653,9 @@ export default {
         const el = canvas.get('el')
         _t.toolTip.currentTip = G6.Util.createDom(`<div class="tooltip">${content}</div>`)
         if (_t.toolTip.currentTip) {
-          // 插入输入框dom
+          // Insert the input box dom
           el.parentNode.appendChild(_t.toolTip.currentTip)
-          // 更新输入框样式
+          // Update input box style
           G6.Util.modifyCSS(_t.toolTip.currentTip, {
             display: 'inline-block',
             position: 'absolute',
@@ -677,9 +677,9 @@ export default {
       update (position, content) {
         let _t = this
         if (_t.toolTip.currentTip) {
-          // 更新文本
+          // Update text
           _t.toolTip.currentTip.innerHTML = content
-          // 更新输入框样式
+          // Update input box style
           G6.Util.modifyCSS(_t.toolTip.currentTip, {
             left: position.left + 'px',
             top: position.top + 'px'
@@ -691,7 +691,7 @@ export default {
         if (_t.toolTip.currentTip) {
           let canvas = _t.graph.get('canvas')
           const el = canvas.get('el')
-          // 删除输入框dom
+          // Delete input box dom
           el.parentNode.removeChild(_t.toolTip.currentTip)
           _t.toolTip.currentTip = null
         }

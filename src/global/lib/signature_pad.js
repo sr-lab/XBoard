@@ -282,7 +282,7 @@ var SignaturePad = (function () {
     };
     SignaturePad.prototype._strokeBegin = function (event) {
         if (this.straightLine) {
-          // 保存当前画布数据
+          // Save current canvas data
           this._imgData = this._ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         } else {
           this._imgData = null
@@ -301,7 +301,7 @@ var SignaturePad = (function () {
     SignaturePad.prototype._strokeUpdate = function (event, isEnd = false) {
         var x = event.clientX;
         var y = event.clientY;
-        // 恢复canvas数据
+        // Restore canvas data
         if (this.straightLine && this._imgData && !isEnd) {
           this._ctx.putImageData(this._imgData,0, 0, 0, 0, this.canvas.width, this.canvas.height)
         }

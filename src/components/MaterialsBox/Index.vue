@@ -31,9 +31,9 @@
 
 <template>
   <div :class="['materials-box', mode]">
-    <!-- 物料编辑器 -->
+    <!-- Material Editor -->
     <MaterialsEditor v-if="mode === 'editor'"></MaterialsEditor>
-    <!-- 物料选择器 -->
+    <!-- Material selector -->
     <MaterialsSelector v-if="mode === 'selector'"></MaterialsSelector>
   </div>
 </template>

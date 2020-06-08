@@ -9,17 +9,17 @@
 const webpack = require('webpack')
 
 module.exports = {
-  // 部署应用包时的基本URL，置空使用相对路径
+  // The basic URL when deploying the application package, leave blank to use relative path
   publicPath: '/XBoard/',
-  // 打包输出目录
+  // package output directory
   outputDir: 'docs',
-  // 静态资源目录
+  // Static resource directory
   assetsDir: '',
   productionSourceMap: false,
-  // 开发环境
+  // Development environment
   // devServer: {
-  //   // 代理设置
   //   proxy: {
+  // // proxy settings
   //     '/api': {
   //       target: '<url>',
   //       changeOrigin: true
@@ -29,8 +29,8 @@ module.exports = {
   css: {
     loaderOptions: {
       less: {
-        // 解决https://github.com/ant-design/ant-motion/issues/44问题
-        // 相关问题：https://github.com/ant-design/ant-design/issues/7927#issuecomment-372513256
+        // Solve https://github.com/ant-design/ant-motion/issues/44 issues
+        // related question：https://github.com/ant-design/ant-design/issues/7927#issuecomment-372513256
         javascriptEnabled: true
       }
     }

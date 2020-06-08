@@ -56,15 +56,15 @@ class Node extends Item {
   // }
 
   /**
-   * 获取从节点关联的所有边
-   * @return {Array} 边的集合
+   * Get all edges associated with a slave node
+   * @return {Array} collection of edges
    */
   getEdges() {
     return this.get('edges');
   }
   /**
-   * 获取引入节点的边 target == this
-   * @return {Array} 边的集合
+   * Get the edge of the incoming node target == this
+   * @return {Array} collection of edges
    */
   getInEdges() {
     const self = this;
@@ -73,8 +73,8 @@ class Node extends Item {
     });
   }
   /**
-   * 获取从节点引出的边 source == this
-   * @return {Array} 边的集合
+   * Get the edge leading from the node source == this
+   * @return {Array} collection of edges
    */
   getOutEdges() {
     const self = this;
@@ -90,9 +90,9 @@ class Node extends Item {
 
   // }
   /**
-   * 根据锚点的索引获取连接点
-   * @param  {Number} index 索引
-   * @return {Object} 连接点 {x,y}
+   * Get the connection point according to the index of the anchor point
+   * @param {Number} index
+   * @return {Object} connection point {x,y}
    */
   getLinkPointByAnchor(index) {
     const anchorPoints = this.getAnchorPoints();
@@ -100,9 +100,9 @@ class Node extends Item {
   }
 
   /**
-    * 获取连接点
-    * @param {Object} point 节点外面的一个点，用于计算交点、最近的锚点
-    * @return {Object} 连接点 {x,y}
+    * Get connection point
+    * @param {Object} point A point outside the node, used to calculate the intersection and the nearest anchor point
+    * @return {Object} connection point {x,y}
     */
   getLinkPoint(point) {
     // const model = this.get('model');
@@ -132,30 +132,30 @@ class Node extends Item {
         intersectPoint = Util.getRectIntersectByPoint(bbox, point);
     }
     let linkPoint = intersectPoint;
-    // 如果存在锚点，则使用交点计算最近的锚点
+    // If there is an anchor point, use the intersection point to calculate the closest anchor point
     if (anchorPoints.length) {
-      if (!linkPoint) { // 如果计算不出交点
+      if (!linkPoint) { // If the intersection point cannot be calculated
         linkPoint = point;
       }
       linkPoint = getNearestPoint(anchorPoints, linkPoint);
     }
-    if (!linkPoint) { // 如果最终依然没法找到锚点和连接点，直接返回中心点
+    if (!linkPoint) { // If you still can't find the anchor point and the connection point, return directly to the center point
       linkPoint = { x: centerX, y: centerY };
     }
     return linkPoint;
   }
 
   /**
-   * 添加边
-   * @param {Edge} edge 边
+   * Add an edge
+   * @param {Edge} edge
    */
   addEdge(edge) {
     this.get('edges').push(edge);
   }
 
   /**
-   * 移除边
-   * @param {Edge} edge 边
+   * Remove edge
+   * @param {Edge} edge
    */
   removeEdge(edge) {
     const edges = this.getEdges();
@@ -166,25 +166,25 @@ class Node extends Item {
   }
 
   clearCache() {
-    this.set(CACHE_BBOX, null); // 清理缓存的 bbox
+    this.set(CACHE_BBOX, null); // Clean cached bbox
     this.set(CACHE_ANCHOR_POINTS, null);
   }
 
-  // 是否仅仅移动节点，其他属性没变化
+  // Whether to just move the node, other attributes have not changed
   _isOnlyMove(cfg) {
     if (!cfg) {
-      return false; // 刷新时不仅仅移动
+      return false; // Not just move when refreshing
     }
-    // 不能直接使用 cfg.x && cfg.y 这类的判定，因为 0 的情况会出现
+    // Can't directly use cfg.x && cfg.y and other judgments, because 0 will appear
     const existX = !Util.isNil(cfg.x);
     const existY = !Util.isNil(cfg.y);
     const keys = Object.keys(cfg);
-    return (keys.length === 1 && (existX || existY)) // 仅有一个字段，包含 x 或者 包含 y
-      || (keys.length === 2 && existX && existY); // 两个字段，同时有 x，同时有 y
+    return (keys.length === 1 && (existX || existY)) // Only one field, contains x or contains y
+      || (keys.length === 2 && existX && existY); // Two fields, both x and y
   }
 
   /**
-   * 获取锚点的定义
+   * Get the definition of an anchor
    * @return {array} anchorPoints， {x,y,...cfg}
    */
   getAnchorPoints() {

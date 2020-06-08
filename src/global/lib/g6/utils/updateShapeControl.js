@@ -9,7 +9,7 @@ export default function (cfg, group) {
   if (shapeControl && shapeControl.hasOwnProperty('controllers') && shapeControl.controllers.length) {
     for (let i = 0, len = shapeControl.controllers.length; i < len; i++) {
       let [x, y] = shapeControl.controllers[i]
-      // 计算Marker中心点坐标
+      // Calculate Marker center point coordinates
       let originX = -width / 2
       let originY = -height / 2
       let anchorX = x * width + originX

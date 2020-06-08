@@ -27,7 +27,7 @@ module.exports = {
       textAlign: 'center',
       textBaseline: 'middle'
     },
-    offset: 5 // 节点的默认文本不居中时的偏移量
+    offset: 5 // Offset when the default text of the node is not centered
   },
   edgeLabel: {
     style: {
@@ -36,7 +36,7 @@ module.exports = {
       textBaseline: 'middle'
     }
   },
-  // 节点应用状态后的样式，默认仅提供 active 和 selected 用户可以自己扩展
+  // The style of the node after the state is applied, by default only active and selected users can extend it
   nodeStateStyle: {
     active: {
       fillOpacity: 0.8

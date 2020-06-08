@@ -12,7 +12,7 @@ export default {
   options: {
     getDefaultCfg () {
       return {
-        // 虚线框节点样式
+        // Dotted frame node style
         dottedNodeStyle: {
           ...config.dottedNode.style.default
         }

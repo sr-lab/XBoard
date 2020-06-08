@@ -31,7 +31,7 @@ import XIcon from './Icon/Index'
 import XTooltip from './Tooltip/Index'
 
 const obj = {
-  // ui组件
+  // ui component
   Menu,
   MenuItem,
   Tooltip,
@@ -50,9 +50,9 @@ const obj = {
   Slider,
   Select,
   Option,
-  // 颜色选择器
+  // color picker
   SketchPicker: Sketch,
-  // 自定义组件
+  // Custom component
   XIcon,
   XTooltip
 }

@@ -11,12 +11,12 @@ export default function (cfg, group) {
   if (shapeControl && shapeControl.hasOwnProperty('controllers') && shapeControl.controllers.length) {
     for (let i = 0, len = shapeControl.controllers.length; i < len; i++) {
       let [x, y, cursor] = shapeControl.controllers[i]
-      // 计算Marker中心点坐标
+      // Calculate Marker center point coordinates
       let originX = -width / 2
       let originY = -height / 2
       let anchorX = x * width + originX
       let anchorY = y * height + originY
-      // 添加Marker形状
+      // Add Marker shape
       group.addShape('marker', {
         id: id + '_shape_control_point' + i,
         index: i,
@@ -25,13 +25,13 @@ export default function (cfg, group) {
           name: 'shapeControlPoint',
           x: anchorX,
           y: anchorY,
-          // 原始位置数据
+          // Raw location data
           position: {
             x,
             y
           },
           cursor: cursor || 'pointer',
-          // 锚点默认样式
+          // Anchor default style
           ...config.shapeControl.style.default.point
         }
       })

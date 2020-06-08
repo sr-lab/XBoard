@@ -4,19 +4,19 @@
  * 工具
  */
 
-// 锚点
-import drawAnchor from './drawAnchor'
-import setAnchorActive from './setAnchorActive'
-import updateAnchor from './updateAnchor'
-// 图形控制
-import drawShapeControl from './drawShapeControl'
-import setShapeControlActive from './setShapeControlActive'
-import updateShapeControl from './updateShapeControl'
-// 线条
-import setLineActive from './setLineActive'
-import updateLine from './updateLine'
-import drawLineAnimate from './drawLineAnimate'
-import destroyLineAnimate from './destroyLineAnimate'
+// anchor point
+import drawAnchor from'./drawAnchor'
+import setAnchorActive from'./setAnchorActive'
+import updateAnchor from'./updateAnchor'
+// Graphic control
+import drawShapeControl from'./drawShapeControl'
+import setShapeControlActive from'./setShapeControlActive'
+import updateShapeControl from'./updateShapeControl'
+// line
+import setLineActive from'./setLineActive'
+import updateLine from'./updateLine'
+import drawLineAnimate from'./drawLineAnimate'
+import destroyLineAnimate from'./destroyLineAnimate'
 
 export default {
   drawAnchor,

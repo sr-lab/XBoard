@@ -9,7 +9,7 @@ const Global = require('../global');
 const PI = Math.PI;
 const sin = Math.sin;
 const cos = Math.cos;
-// 一共支持8个方向的自环，每个环占的角度是45度，在计算时再二分，为22.5度
+// A total of 8 directions of self-loops are supported, and the angle occupied by each ring is 45 degrees, which is divided into two points when calculating, it is 22.5 degrees
 const SELF_LINK_SIN = sin(PI / 8);
 const SELF_LINK_COS = cos(PI / 8);
 
@@ -34,7 +34,7 @@ const GraphicUtil = {
       x: bbox.maxX,
       y: bbox.maxY
     };
-    // 根据父元素变换矩阵
+    // Transform matrix according to parent element
     if (parent) {
       const matrix = parent.getMatrix();
       leftTop = MathUtil.applyMatrix(leftTop, matrix);
@@ -48,7 +48,7 @@ const GraphicUtil = {
       maxY: rightBottom.y
     };
   },
-  // 获取某元素的自环边配置
+  // Get the self-loop side configuration of an element
   getLoopCfgs(cfg) {
     const item = cfg.sourceNode || cfg.targetNode;
     const containerMatrix = item.get('group')
@@ -56,19 +56,19 @@ const GraphicUtil = {
     const bbox = item.getKeyShape()
       .getBBox();
     const loopCfg = cfg.loopCfg || {};
-    // 距离keyShape边的最高距离
+    // The highest distance from the keyShape side
     const dist = loopCfg.dist || Math.max(bbox.width, bbox.height) * 2;
-    // 自环边与keyShape的相对位置关系
+    // Relative position relationship between self-ring edge and keyShape
     const position = loopCfg.position || Global.loopPosition;
     const r = Math.max(bbox.width, bbox.height) / 2;
     const scaleRate = (r + dist) / r;
-    // 中心取group上真实位置
+    // The center takes the real position on the group
     const center = [ containerMatrix[ 6 ], containerMatrix[ 7 ] ];
     const sinDelta = r * SELF_LINK_SIN;
     const cosDelta = r * SELF_LINK_COS;
     let startPoint = [ cfg.startPoint.x, cfg.startPoint.y ];
     let endPoint = [ cfg.endPoint.x, cfg.endPoint.y ];
-    // 如果定义了锚点的，直接用锚点坐标，否则，根据自环的 cfg 计算
+    // If the anchor point is defined, the anchor point coordinates are used directly, otherwise, it is calculated according to the self-loop cfg
     if (startPoint[0] === endPoint[0] && startPoint[1] === endPoint[1]) {
       switch (position) {
         case 'top':
@@ -107,7 +107,7 @@ const GraphicUtil = {
           startPoint = [ center[0] - sinDelta, center[1] - cosDelta ];
           endPoint = [ center[0] + sinDelta, center[1] - cosDelta ];
       }
-      // 如果逆时针画，交换起点和终点
+      // If drawing counterclockwise, swap the start and end points
       if (loopCfg.clockwise === false) {
         const swap = [ startPoint[0], startPoint[1] ];
         startPoint = [ endPoint[0], endPoint[1] ];
@@ -135,7 +135,7 @@ const GraphicUtil = {
     traverse(data, fn);
   },
   radialLayout(data, layout) {
-    // 布局方式有 H / V / LR / RL / TB / BT
+    // The layout methods are H / V / LR / RL / TB / BT
     const VERTICAL_LAYOUTS = [ 'V', 'TB', 'BT' ];
     const min = {
       x: Infinity,
@@ -145,11 +145,11 @@ const GraphicUtil = {
       x: -Infinity,
       y: -Infinity
     };
-    // 默认布局是垂直布局TB，此时x对应rad，y对应r
+    // The default layout is the vertical layout TB, where x corresponds to rad and y corresponds to r
     let rScale = 'x';
     let radScale = 'y';
     if (layout && VERTICAL_LAYOUTS.indexOf(layout) >= 0) {
-      // 若是水平布局，y对应rad，x对应r
+      // In the horizontal layout, y corresponds to rad and x corresponds to r
       radScale = 'x';
       rScale = 'y';
     }
@@ -184,25 +184,25 @@ const GraphicUtil = {
     return data;
   },
   /**
-   * 根据 label 所在线条的位置百分比，计算 label 坐标
-   * @param {object}  pathShape  G 的 path 实例，一般是 Edge 实例的 keyShape
-   * @param {number}  percent    范围 0 - 1 的线条百分比
-   * @param {number}  refX     x 轴正方向为基准的 label 偏移
-   * @param {number}  refY     y 轴正方向为基准的 label 偏移
-   * @param {boolean} rotate     是否根据线条斜率旋转文本
-   * @return {object} 文本的 x, y, 文本的旋转角度
+   * Calculate the label coordinates based on the percentage of the line where the label is located
+   * @param {object} pathShape G path instance, generally the keyShape of Edge instance
+   * @param {number} percent The percentage of lines in the range 0-1
+   * @param {number} refX label offset based on the positive x-axis direction
+   * @param {number} refY label offset based on the positive y-axis direction
+   * @param {boolean} rotate whether to rotate the text according to the line slope
+   * @return {object} text x, y, text rotation angle
    */
   getLabelPosition(pathShape, percent, refX, refY, rotate) {
     const TAN_OFFSET = 0.0001;
     let vector = [];
     const point = pathShape.getPoint(percent);
-    // 头尾最可能，放在最前面，使用 g path 上封装的方法
+    // Head and tail are the most likely, put in the front, using the method encapsulated on g path
     if (percent < TAN_OFFSET) {
       vector = pathShape.getStartTangent().reverse();
     } else if (percent > (1 - TAN_OFFSET)) {
       vector = pathShape.getEndTangent();
     } else {
-      // 否则取指定位置的点,与少量偏移的点，做微分向量
+      // Otherwise, take the point at the specified position and the point with a small offset to make the differential vector
       const offsetPoint = pathShape.getPoint(percent + TAN_OFFSET);
       vector.push([ point.x, point.y ]);
       vector.push([ offsetPoint.x, offsetPoint.y ]);
@@ -216,16 +216,16 @@ const GraphicUtil = {
       point.y += sin(rad) * refX;
     }
     if (refY) {
-      // 默认方向是 x 轴正方向，法线是 求出角度 - 90°
-      let normal = rad - PI / 2;
-      // 若法线角度在 y 轴负方向，切到正方向，保证 refY 相对于 y 轴正方向
+      // The default direction is the positive direction of the x-axis, and the normal is to find the angle-90°
+      let normal = rad-PI / 2;
+      // If the normal angle is in the negative direction of the y-axis, cut to the positive direction to ensure that refY is relative to the positive direction of the y-axis
       if (rad > 1 / 2 * PI && rad < 3 * 1 / 2 * PI) {
         normal -= PI;
       }
       point.x += cos(normal) * refY;
       point.y += sin(normal) * refY;
     }
-    // 需要原始的旋转角度计算 textAlign
+    // Requires original rotation angle calculation textAlign
     const result = {
       x: point.x,
       y: point.y,

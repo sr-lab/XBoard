@@ -71,7 +71,7 @@
     },
     data () {
       return {
-        // 是否已折叠
+        // Whether folded
         isFolded: false
       }
     },
@@ -89,7 +89,7 @@
         if (!_t.enableFold) {
           return
         }
-        // 处理面板折叠
+        // Handle panel folding
         _t.isFolded = !_t.isFolded
       }
     }

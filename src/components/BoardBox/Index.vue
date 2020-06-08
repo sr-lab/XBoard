@@ -58,14 +58,14 @@
       @dblclick="handleBoardBodyDbClick"
       @contextmenu.stop.prevent="handleBoardBodyRightClick"
     >
-      <!-- 画板 -->
+      <!-- Artboard -->
       <SignaturePad
         ref="signaturePad"
         :options="currentBoard.signaturePad.options"
         :style="padStyle"
       >
       </SignaturePad>
-      <!-- 文本 -->
+      <!-- Text -->
       <TextPad
         v-for="(item, index) in currentBoard.textList"
         :key="'text_pad_' + index"
@@ -78,7 +78,7 @@
         @click="() => handleTextPadClick(index)"
       >
       </TextPad>
-      <!-- 便签 -->
+      <!-- Sticky Notes -->
       <NotePad
         v-for="(item, index) in currentBoard.noteList"
         :key="'note_pad_' + index"
@@ -114,7 +114,7 @@
           </ToolItem>
           <Divider :key="'divider_' + index" v-if="item.divider" type="vertical" />
         </template>
-        <!-- 颜色 -->
+        <!-- Color -->
         <ToolItem
           v-if="tools.penColor.enable"
           :disabled="!tools.penColor.types.includes(actionType)"
@@ -132,7 +132,7 @@
             />
           </template>
         </ToolItem>
-        <!-- 背景色 -->
+        <!-- background color -->
         <ToolItem
           v-if="tools.backgroundColor.enable"
           :disabled="!tools.backgroundColor.types.includes(actionType)"
@@ -140,7 +140,7 @@
           style="opacity: 1;"
         >
           <template v-slot:label>
-            <!-- FIXME 使用:value形式进行绑定 -->
+            <!-- FIXME Use: value form to bind -->
             <ColorPicker
               :value="currentBoard.formData.backgroundColor"
               :disabled="!tools.backgroundColor.types.includes(actionType)"
@@ -151,7 +151,7 @@
             />
           </template>
         </ToolItem>
-        <!-- 画笔大小 -->
+        <!-- Brush size -->
         <ToolItem
           v-if="tools.dotSize.enable"
           :disabled="!tools.dotSize.types.includes(actionType)"
@@ -171,7 +171,7 @@
           </template>
         </ToolItem>
         <Divider type="vertical" />
-        <!-- 多语言 -->
+        <!-- multi-language -->
         <ToolItem
           v-if="tools.language.enable"
           :disabled="!tools.language.types.includes(actionType)"
@@ -225,7 +225,7 @@
         </ToolItem>
       </ToolBox>
     </div>
-    <!-- 右键菜单 -->
+    <!-- Right-click menu -->
     <ContextMenu ref="contextMenu">
       <Menu :active-name="activeMenu" @on-select="handleContextMenuChange">
         <MenuItem
@@ -238,9 +238,9 @@
         </MenuItem>
       </Menu>
     </ContextMenu>
-    <!-- 栅格 -->
+    <!-- Grid -->
     <GridBox ref="gridBox" @close="handleGridBoxClose"></GridBox>
-    <!-- 物料 -->
+    <!-- materials -->
     <MaterialsBox ref="materialsBox" v-show="currentBoard.status.materialsBox"></MaterialsBox>
   </div>
 </template>
@@ -257,7 +257,7 @@ import NotePad from '../NotePad/Index'
 import GridBox from '../GridBox/Index'
 import MaterialsBox from '../MaterialsBox/Index'
 
-// 热键
+// Hotkey
 import Mousetrap from 'mousetrap'
 import html2canvas from 'html2canvas'
 
@@ -568,19 +568,19 @@ export default {
           divider: false
         }
       },
-      // 当前激活工具
+      // Current activation tool
       activeTool: null,
-      // 当前操作类型 draw: 绘画 note 便签 preview 预览
+      // Current operation type draw: draw note note preview preview
       actionType: null,
-      // 操作状态
+      // Operation status
       actionStatus: null,
-      // 右键菜单列表
+      // right-click menu list
       contextMenuList: [],
-      // 当前激活的菜单
+      // The currently activated menu
       activeMenu: null,
-      // 是否全屏
+      // Whether full screen
       isFullScreen: false,
-      // 禁用
+      // disable
       disabled: {
         redo: false
       },
@@ -655,13 +655,13 @@ export default {
   methods: {
     init () {
       let _t = this
-      // 处理工具激活
+      // Processing tool activation
       _t.handleActiveTool('pencil')
-      // 初始化右键菜单
+      // Initialize the right-click menu
       _t.initContextMenuList()
-      // 绑定热键
+      // Bind hotkey
       _t.bindShortcuts()
-      // 绑定unload
+      // Bind unload
       _t.bindUnload()
     },
     handleActiveTool (name, defName) {
@@ -725,7 +725,7 @@ export default {
           handler(_t.tools[key])
         }
       }
-      // 绑定esc
+      // Bind esc
       Mousetrap.bind('escape', function () {
         if (_t.isFullScreen) {
           _t.isFullScreen = false
@@ -765,7 +765,7 @@ export default {
       } else if (['undo', 'redo', 'image', 'clear', 'download'].includes(name)) {
         _t.handleToolClick(_t.tools[name])
       } else {
-        // 置为预览
+        // Set as preview
         _t.handleActiveTool('preview')
       }
     },
@@ -776,14 +776,14 @@ export default {
       let _t = this
       switch (_t.actionType) {
         case 'text':
-          // 新增文本
+          // New text
           _t.doAddText({
             x: event.clientX,
             y: event.clientY
           })
           break
         case 'note':
-          // 新增便签
+          // Add notes
           _t.doAddNote({
             x: event.clientX,
             y: event.clientY
@@ -828,7 +828,7 @@ export default {
           el.setOption('minWidth', _t.currentBoard.formData.dotSize * 0.3)
           el.setOption('maxWidth', _t.currentBoard.formData.dotSize * 1.7)
           el.setOption('penColor', _t.currentBoard.formData.penColor)
-          // 取消直线模式
+          // Cancel straight line mode
           el.setOption('straightLine', false)
           el.draw()
           break
@@ -839,7 +839,7 @@ export default {
           el.setOption('minWidth', _t.currentBoard.formData.dotSize * 1)
           el.setOption('maxWidth', _t.currentBoard.formData.dotSize * 1)
           el.setOption('penColor', _t.currentBoard.formData.penColor)
-          // 设置直线模式
+          // Set straight line mode
           el.setOption('straightLine', true)
           // el.drawLine()
           el.draw()
@@ -860,9 +860,9 @@ export default {
           el.setOption('dotSize', 18)
           el.setOption('minWidth', 18)
           el.setOption('maxWidth', 18)
-          // FIXME 【BUG】设置画笔为背景色，但是并有没有什么用
+          // FIXME 【BUG】Set the brush as the background color, but there is no use
           el.setOption('penColor', _t.currentBoard.formData.backgroundColor)
-          // 取消直线模式
+          // Cancel straight line mode
           el.setOption('straightLine', false)
           el.eraser()
           break
@@ -880,11 +880,11 @@ export default {
             title: _t.$t('L10101'),
             content: _t.$t('L10102'),
             onOk: function () {
-              // 清除画布
+              // Clear canvas
               el.clear()
-              // 清除文本
+              // clear text
               _t.currentBoard.textList = []
-              // 清除便签
+              // clear notes
               _t.currentBoard.noteList = []
             }
           })
@@ -902,9 +902,9 @@ export default {
           })
           break
         case 'fullScreen':
-          // 判断标识或是否退出全屏操作
+          // Determine the logo or whether to exit the full-screen operation
           if (_t.isFullScreen) {
-            // 退出全屏
+            // Exit Full Screen
             if (document.exitFullscreen) {
               document.exitFullscreen()
             } else if (document.mozCancelFullScreen) {
@@ -915,7 +915,7 @@ export default {
               document.msExitFullscreen()
             }
           } else {
-            // 全屏
+            // full screen
             let docElm = document.documentElement
             if (docElm.requestFullscreen) {
               docElm.requestFullscreen()
@@ -927,7 +927,7 @@ export default {
               docElm.msRequestFullscreen()
             }
           }
-          // 更新标识
+          // Update logo
           _t.isFullScreen = !_t.isFullScreen
           break
         case 'penColor':
@@ -943,28 +943,28 @@ export default {
             title: _t.$t('L10101'),
             content: _t.$t('L10103'),
             onOk: function () {
-              // 更新数据
+              // update data
               _t.currentBoard.formData.backgroundColor = val
-              // 设置背景图
+              // Set the background image
               el.setOption('backgroundColor', val)
-              // 清除画布
+              // clear canvas
               el.clear()
-              // 清除文本
+              // clear text
               _t.currentBoard.textList = []
-              // 清除便签
+              // clear notes
               _t.currentBoard.noteList = []
             }
           })
           break
         case 'grid':
-          // 切换状态
+          // Switch state
           _t.switchStatus(false)
-          // 截图
+          // screenshot
           html2canvas(_t.boardBody, {
             backgroundColor: null,
             imageTimeout: 0
           }).then(function (canvas) {
-            // 隐藏物料
+            // Hidden material
             if (_t.materialsBox && _t.materialsBox.doHide) {
               _t.materialsBox.doHide()
             }
@@ -983,7 +983,7 @@ export default {
           }
           break
       }
-      // 非便签输入模式时清除鼠标移动事件
+      // Clear mouse movement events in non-note input mode
       if (!['text', 'note'].includes(_t.actionType)) {
         document.onmouseup = null
         document.onmousemove = null
@@ -992,7 +992,7 @@ export default {
     },
     handleLocaleChange (name) {
       let _t = this
-      // 更新cookie
+      // Update cookie
       let key = _t.$X.config.cookie.getItem('locale')
       _t.$X.Cookies.set(key, name, {
         expires: 7,
@@ -1000,7 +1000,7 @@ export default {
       })
       _t.$i18n.locale = _t.$X.langs.locale = _t.locale = name
     },
-    // 切换状态
+    // Switch state
     switchStatus (val, key) {
       let _t = this
       if (key !== undefined) {
@@ -1012,7 +1012,7 @@ export default {
           _t.currentBoard.status[k] = val !== undefined ? val : !_t.currentBoard.status[k]
         }
       }
-      // 处理样式
+      // Processing style
       _t.handleFooterStyle()
     },
     doAddText (info) {
@@ -1035,7 +1035,7 @@ export default {
         title: _t.$t('L10101'),
         content: _t.$t('L10106'),
         onOk: function () {
-          // 删除文本
+          // Delete text
           _t.doRemoveText(index)
         }
       })
@@ -1075,7 +1075,7 @@ export default {
         title: _t.$t('L10101'),
         content: _t.$t('L10105'),
         onOk: function () {
-          // 删除便签
+          // Delete notes
           _t.doRemoveNote(index)
         }
       })
@@ -1097,7 +1097,7 @@ export default {
     },
     handleGridBoxClose () {
       let _t = this
-      // 切换状态
+      // Switch state
       _t.switchStatus(true)
     },
     doHideContextMenu () {
@@ -1114,7 +1114,7 @@ export default {
   mounted () {
     let _t = this
     _t.$nextTick(function () {
-      // 处理样式
+      // Processing style
       _t.handleFooterStyle()
     })
   }

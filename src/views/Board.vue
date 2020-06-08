@@ -22,7 +22,7 @@
     },
     created () {
       let _t = this
-      // 分发mutation，新增画板
+      // Distributing mutation, adding artboard
       _t.$store.commit('board/list/add', {
         id: new Date().getTime(),
         screenshot: ''

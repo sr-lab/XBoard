@@ -70,9 +70,9 @@ class Event {
     const target = e.target;
     const eventType = e.type;
     /**
-     * (clientX, clientY): 相对于页面的坐标；
-     * (canvasX, canvasY): 相对于 <canvas> 左上角的坐标；
-     * (x, y): 相对于整个画布的坐标, 与 model 的 x, y 是同一维度的。
+     * (clientX, clientY): coordinates relative to the page;
+     * (canvasX, canvasY): relative to the upper left corner of <canvas>;
+     * (x, y): relative to the coordinates of the entire canvas, it is in the same dimension as the x, y of the model.
      */
     e.canvasX = e.x / pixelRatio;
     e.canvasY = e.y / pixelRatio;
@@ -82,7 +82,7 @@ class Event {
     }
     e.x = point.x;
     e.y = point.y;
-    // 事件currentTarget是graph
+    // Event currentTarget is graph
     e.currentTarget = graph;
     if (target === canvas) {
       if (eventType === 'mousemove') {
@@ -104,11 +104,11 @@ class Event {
       return;
     }
     const type = item.getType();
-    // 事件target是触发事件的Shape实例，, item是触发事件的item实例
+    // Event target is the Shape instance that triggered the event, and item is the item instance that triggered the event
     e.target = target;
     e.item = item;
     graph.emit(eventType, e);
-    // g的事件会冒泡，如果target不是canvas，可能会引起同个节点触发多次，需要另外判断
+    // The event of g will bubble. If the target is not canvas, it may cause the same node to trigger multiple times, which needs to be judged separately.
     if (eventType === 'mouseenter' || eventType === 'mouseleave' || eventType === 'dragenter' || eventType === 'dragleave') {
       return;
     }
@@ -137,9 +137,9 @@ class Event {
     const canvas = this.graph.get('canvas');
     const item = e.target === canvas ? null : e.item;
     const preItem = this.preItem;
-    // 避免e的type与触发的事件不同
+    // Avoid that the type of e is different from the triggered event
     e = Util.cloneEvent(e);
-    // 从前一个item直接移动到当前item，触发前一个item的leave事件
+    // Move directly from the previous item to the current item, triggering the leave event of the previous item
     if (preItem && preItem !== item && !preItem.destroyed) {
       e.item = preItem;
       self._emitCustomEvent(preItem.getType(), 'mouseleave', e);
@@ -147,7 +147,7 @@ class Event {
         self._emitCustomEvent(preItem.getType(), 'dragleave', e);
       }
     }
-    // 从一个item或canvas移动到当前item，触发当前item的enter事件
+    // Move from an item or canvas to the current item, trigger the enter event of the current item
     if (item && preItem !== item) {
       e.item = item;
       self._emitCustomEvent(type, 'mouseenter', e);

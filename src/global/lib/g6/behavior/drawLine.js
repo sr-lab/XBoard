@@ -18,10 +18,10 @@ export default {
       let _t = this
       let node = event.item
       let target
-      // 锚点数据
+      // Anchor point data
       let anchorPoints = node.getAnchorPoints()
       if (anchorPoints && anchorPoints.length) {
-        // 获取距离指定坐标最近的一个锚点
+        // Get the anchor point closest to the specified coordinate
         target = node.getLinkPoint({ x: event.x, y: event.y })
       } else {
         target = node
@@ -36,14 +36,15 @@ export default {
         _t.shouldEnd.call(this, event)
       } else {
         _t.graph.$X.currentEdge = _t.graph.addItem('edge', {
-          // 起始节点
+          // start node
           source: target,
-          // 终止节点/位置
+          // Terminate node/location
           target: {
             x: event.x,
             y: event.y
           },
-          // FIXME 边的形式需要与工具栏联动
+
+          // FIXME: The form of the edge needs to be linked with the toolbar
           shape: _t.graph.$X.lineType || 'line',
           startArrow: _t.graph.$X.startArrow || false,
           endArrow: _t.graph.$X.endArrow || false
@@ -65,7 +66,7 @@ export default {
     onEdgeClick (event) {
       let _t = this
       if (_t.graph.$X.isDrawing && _t.graph.$X.currentEdge === event.item) {
-        // 画线过程中点击则移除当前画线
+        // Click on the line drawing process to remove the current line drawing
         _t.graph.removeItem(_t.graph.$X.currentEdge)
 
         _t.graph.$X.currentEdge = null

@@ -18,7 +18,7 @@ const defBoard = {
   },
   formData: formData,
   signaturePad: {
-    // 画板配置
+  // Artboard configuration
     options: {
       dotSize: formData.dotSize,
       minWidth: formData.dotSize * 0.3,
@@ -28,16 +28,16 @@ const defBoard = {
       backgroundColor: formData.backgroundColor,
       penColor: formData.penColor
     },
-    // 画板数据
+    // Artboard data
     data: [],
-    // 撤销历史
+    // Undo history
     undoHistory: []
   },
-  // 文本列表
+  // text list
   textList: [],
-  // 便签列表
+  // List of notes
   noteList: [],
-  // 当前激活的面板
+  // The currently activated panel
   activePad: {}
 }
 
@@ -66,7 +66,7 @@ export default new Vuex.Store({
     },
     'board/list/remove': (state, index) => {
       state.boardList.splice(index, 1)
-      // 默认添加一项
+      // add one by default
       if (!state.boardList.length) {
         let item = {
           ...defBoard

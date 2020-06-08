@@ -1,5 +1,5 @@
 /**
- * @fileOverview 自定义节点和边的过程中，发现大量重复代码
+ * @fileOverview In the process of customizing nodes and edges, a lot of duplicate code was found
  * @author dxq613@gmail.com
  */
 const Global = require('../global');
@@ -8,15 +8,15 @@ const Util = require('../util/index');
 const CLS_SHAPE_SUFFIX = '-shape';
 const CLS_LABEL_SUFFIX = '-label';
 
-// 单个 shape 带有一个 label，共用这段代码
+// A single shape with a label, share this code
 const SingleShape = {
   itemType: '', // node, edge, group, anchor 等
 	/**
-	 * 绘制节点/边，包含文本
-	 * @override
-	 * @param  {Object} cfg 节点的配置项
-	 * @param  {G.Group} group 节点的容器
-	 * @return {G.Shape} 绘制的图形
+   * Draw nodes/edges, including text
+   * @override
+   * @param {Object} cfg node configuration items
+   * @param {G.Group} group node container
+   * Graphic drawn by @return {G.Shape}
 	 */
   draw(cfg, group) {
     const shape = this.drawShape(cfg, group);
@@ -42,35 +42,35 @@ const SingleShape = {
 
   },
   /**
-	 * 获取文本的配置项
-	 * @internal 用户创建和更新节点/边时，同时会更新文本
-	 * @param  {Object} cfg 节点的配置项
-   * @param {Object} labelCfg 文本的配置项
-	 * @param {G.Group} group 父容器，label 的定位可能与图形相关
-	 * @return {Object} 图形的配置项
-	 */
+   * Get text configuration items
+   * @internal will update the text when creating and updating nodes/edges
+   * @param {Object} cfg node configuration items
+   * @param {Object} labelCfg text configuration item
+   * @param {G.Group} group parent container, label positioning may be related to graphics
+   * @return {Object} graphic configuration item
+   */
   getLabelStyle(cfg, labelCfg, group) {
     const calculateStyle = this.getLabelStyleByPosition(cfg, labelCfg, group);
     calculateStyle.text = cfg.label;
-    const attrName = this.itemType + 'Label'; // 取 nodeLabel，edgeLabel 的配置项
+    const attrName = this.itemType + 'Label'; // Get the configuration items of nodeLabel and edgeLabel
     const defaultStyle = Global[attrName] ? Global[attrName].style : null;
     const labelStyle = Util.mix({}, defaultStyle, calculateStyle, labelCfg.style);
     return labelStyle;
   },
   /**
-	 * 获取图形的配置项
-	 * @internal 仅在定义这一类节点使用，用户创建和更新节点
-	 * @param  {Object} cfg 节点的配置项
-	 * @return {Object} 图形的配置项
+	 * Get graphic configuration items
+   * @internal is only used to define this type of node, users create and update nodes
+   * @param {Object} cfg node configuration items
+   * @return {Object} graphic configuration item
 	 */
   getShapeStyle(cfg) {
     return cfg.style;
   },
 	/**
-	 * 更新节点，包含文本
-	 * @override
-	 * @param  {Object} cfg 节点/边的配置项
-	 * @param  {G6.Item} item 节点/边
+	 * Update node with text
+   * @override
+   * @param {Object} cfg node/edge configuration items
+   * @param {G6.Item} item node/edge
 	 */
   update(cfg, item) {
     const group = item.getContainer();
@@ -80,10 +80,10 @@ const SingleShape = {
     shape.attr(shapeStyle);
     const labelClassName = this.itemType + CLS_LABEL_SUFFIX;
     const label = group.findByClassName(labelClassName);
-		// 此时需要考虑之前是否绘制了 label 的场景存在三种情况
-		// 1. 更新时不需要 label，但是原先存在 label，此时需要删除
-		// 2. 更新时需要 label, 但是原先不存在，创建节点
-		// 3. 如果两者都存在，更新
+		// At this time, there are three situations that need to be considered whether the label has been drawn before
+    // // 1. No label is needed when updating, but the label originally existed and needs to be deleted at this time
+    // // 2. A label is required for updating, but it does not exist originally, create a node
+    // // 3. If both exist, update
     if (!cfg.label) {
       label && label.remove();
     } else {
@@ -94,9 +94,9 @@ const SingleShape = {
         const labelCfg = cfg.labelCfg || {};
         const labelStyle = this.getLabelStyle(cfg, labelCfg, group);
         /**
-         * fixme g中shape的rotate是角度累加的，不是label的rotate想要的角度
-         * 由于现在label只有rotate操作，所以在更新label的时候如果style中有rotate就重置一下变换
-         * 后续会基于g的Text复写一个Label出来处理这一类问题
+         * fixme The rotation of the shape in g is the cumulative angle, not the desired angle of the rotation of the label
+         * Since the label only has rotate operation now, if there is rotate in the style, the transformation will be reset when the label is updated
+         * In the future, a Label will be copied based on the Text of g to deal with this type of problem
          */
         label.resetMatrix();
         label.attr(labelStyle);
@@ -105,24 +105,24 @@ const SingleShape = {
   },
 
 	/**
-	 * 设置节点的状态，主要是交互状态，业务状态请在 draw 方法中实现
-	 * 单图形的节点仅考虑 selected、active 状态，有其他状态需求的用户自己复写这个方法
-	 * @override
-	 * @param  {String} name 状态名称
-	 * @param  {Object} value 状态值
-	 * @param  {G6.Item} item 节点
-	 */
+	 * Set the state of the node, mainly the interactive state, please implement the business state in the draw method
+   * The node of single graph only considers the selected and active states, and users with other states need to copy this method themselves
+   * @override
+   * @param {String} name State name
+   * @param {Object} value status value
+   * @param {G6.Item} item node
+   */
   setState(name, value, item) {
     const shape = item.get('keyShape');
     if (!shape) {
       return;
     }
     const stateStyle = item.getStateStyle(name);
-    if (value) { // 如果设置状态,在原本状态上叠加绘图属性
+    if (value) { // If the state is set, the drawing attributes are superimposed on the original state
       shape.attr(stateStyle);
-    } else { // 取消状态时重置所有状态，依次叠加仍有的状态
+    } else {// Reset all states when canceling the state, superimpose the remaining states in turn
       const style = item.getCurrentStatesStyle();
-      // 如果默认状态下没有设置attr，在某状态下设置了，需要重置到没有设置的状态
+      // If attr is not set in the default state, if it is set in a certain state, it needs to be reset to the state without setting
       Util.each(stateStyle, (val, attr) => {
         if (!style[attr]) {
           style[attr] = null;

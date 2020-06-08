@@ -18,16 +18,16 @@ export default {
     ...base,
     draw (cfg, group) {
       const { startPoint, endPoint } = cfg
-      // 路径规划
+      // route plan
       let path = []
       if (startPoint && startPoint.x !== null && startPoint.y !== null) {
-        // 起点
+        // starting point
         path.push([ 'M', startPoint.x, startPoint.y ])
       }
       if (endPoint && endPoint.hasOwnProperty('x') && endPoint.hasOwnProperty('y')) {
-        // 根据端点类型求第一个拐点
+        // Find the first inflection point according to the endpoint type
         let turnOne = {}
-        // 根据鼠标位置求第二拐点
+        // Find the second inflection point according to the mouse position
         let turnTwo = {}
         switch (startPoint.anchorIndex) {
           // top
@@ -75,7 +75,7 @@ export default {
             }
             break
         }
-        // FIXME ??? 如果循环计算拐点会如何
+        // FIXME ??? What if the inflection point is calculated in a loop
         let turnPointArr = [
           turnOne,
           turnTwo
@@ -91,7 +91,7 @@ export default {
           } else {
             latPoint = turnTwo
           }
-          // 根据鼠标与最后一个拐点的位置计算下一个拐点
+          // Calculate the next inflection point based on the position of the mouse and the last inflection point
           if (nextPoint.x - latPoint.x > defConfig.maxDistance) {
             nextPoint = {
               ...nextPoint,
@@ -118,7 +118,7 @@ export default {
             }
             flag = true
           }
-          // 计算完插入下一个节点
+          // After calculation, insert the next node
           if (flag) {
             turnPointArr.push(nextPoint)
             getTurnPoint()
@@ -142,16 +142,16 @@ export default {
     },
     getControlPoints (cfg) {
       const { startPoint, endPoint } = cfg
-      // 路径规划
+      // route plan
       let path = []
       if (startPoint && startPoint.x !== null && startPoint.y !== null) {
-        // 起点
+        // starting point
         path.push({ x: startPoint.x, y: startPoint.y })
       }
       if (endPoint && endPoint.hasOwnProperty('x') && endPoint.hasOwnProperty('y')) {
-        // 根据端点类型求第一个拐点
+        // Find the first inflection point according to the endpoint type
         let turnOne = {}
-        // 根据鼠标位置求第二拐点
+        // Find the second inflection point according to the mouse position
         let turnTwo = {}
         switch (startPoint.anchorIndex) {
           // top
@@ -199,7 +199,7 @@ export default {
             }
             break
         }
-        // FIXME ??? 如果循环计算拐点会如何
+        // FIXME ??? What if the inflection point is calculated in a loop
         let turnPointArr = [
           turnOne,
           turnTwo
@@ -215,7 +215,7 @@ export default {
           } else {
             latPoint = turnTwo
           }
-          // 根据鼠标与最后一个拐点的位置计算下一个拐点
+          // Calculate the next inflection point based on the position of the mouse and the last inflection point
           if (nextPoint.x - latPoint.x > defConfig.maxDistance) {
             nextPoint = {
               ...nextPoint,
@@ -242,7 +242,7 @@ export default {
             }
             flag = true
           }
-          // 计算完插入下一个节点
+          // After calculation, insert the next node
           if (flag) {
             turnPointArr.push(nextPoint)
             getTurnPoint()

@@ -14,7 +14,7 @@
 export default {
   name: 'App',
   created () {
-    // 阻止浏览器默认右键菜单
+    // Prevent browser default right-click menu
     document.oncontextmenu = function (event) {
       if (event.stopPropagation) {
         event.stopPropagation()

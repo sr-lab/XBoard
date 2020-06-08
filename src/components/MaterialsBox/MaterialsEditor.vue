@@ -71,7 +71,7 @@
           size: size
         })
         const grid = new Grid()
-        // 生成编辑器实例
+        // Generate editor instance
         _t.editor = new G6.Graph({
           plugins: [
             minimap,
@@ -81,7 +81,7 @@
           width: sketchpad.clientWidth,
           height: sketchpad.clientHeight,
           fitViewPadding: 20,
-          // 模式
+          // mode
           modes: {
             edit: [
               'zoom-canvas',
@@ -94,12 +94,12 @@
                 enableEdgeLabel: true
               }
             ],
-            // 只读，
+            // Read only,
             preview: ['drag-canvas', 'zoom-canvas']
           },
-          // 节点样式
+          // Node style
           nodeStyle: {
-            // 默认样式
+            // Default style
             default: {
               fill: '#FFFFFF',
               fillOpacity: 1,
@@ -107,34 +107,34 @@
               strokeOpacity: 1,
               cursor: 'move'
             },
-            // active 状态下的样式
+            // active style
             active: {},
-            // selected 状态下的样式
+            // Style in selected state
             selected: {},
-            // hover 状态下的样式
+            // Style in hover state
             hover: {}
           },
           edgeStyle: {
             default: {
               stroke: '#000000',
               strokeOpacity: 1,
-              // 扩展响应范围
+              // Extended response range
               lineAppendWidth: 10,
               cursor: 'pointer'
             }
           }
         })
-        // 挂载全局命名空间
+        // Mount the global namespace
         _t.editor.$X = {
           ...config.$X
         }
-        // 挂载G6配置
+        // Mount G6 configuration
         _t.editor.$C = G6.$C
-        // 设置模式为编辑
+        // Set the mode to edit
         _t.editor.setMode('edit')
-        // 绑定事件
+        // Bind event
         _t.editor.on('canvas:mousedown', _t._canvasMousedown)
-        // 绑定事件
+        // Bind event
         _t.editor.on('canvas:mouseup', _t._canvasMouseup)
         // _t.editor.on('click', _t._editorClick)
         // _t.editor.on('node:click', _t._nodeClick)
@@ -204,13 +204,13 @@
           _t.editor.setItemState(event.item, 'active', !event.item.hasState('active'))
         }
       },
-      // 清除所有状态
+      // Clear all status
       doClearAllStates () {
         let _t = this
         if (!_t.editor) {
           return
         }
-        // 批量操作时关闭自动重绘，以提升性能
+        // Turn off automatic redraw during batch operations to improve performance
         _t.editor.setAutoPaint(false)
         _t.editor.getNodes().forEach(function (node) {
           _t.editor.clearItemStates(node)
@@ -258,12 +258,12 @@
           },
           width: info.width,
           height: info.height,
-          // FIXME 定义锚点坐标
+          // FIXME Define anchor coordinates
           anchorPoints: info.anchorPoints,
-          // 定义shapeControl
+          // Define shapeControl
           shapeControl: info.shapeControl
         }
-        // 广播事件，通过自定义交互 node-control 添加节点
+        // Broadcast events, add nodes through custom interaction node-control
         _t.editor.emit('editor:addNode', node)
       },
       handleToolTrigger (info) {
@@ -386,7 +386,7 @@
           case 'startArrow':
           case 'endArrow':
             _t.editor.$X[info.name] = info.data
-            // TODO 根据端点类型更新边
+            // TODO Update edges based on endpoint type
             _t.editor.getEdges().forEach(edge => {
               if (edge.hasState('active')) {
                 let { style } = edge.getModel()
@@ -430,14 +430,14 @@
     },
     created () {
       let _t = this
-      // 监听事件
+      // Listen for events
       _t.$X.utils.bus.$on('board/materials/editor/show', function (data) {
         _t.doShow()
-        // 处理操作类型，初始化编辑器
+        // Process operation type, initialize editor
         _t.initInfo(data)
       })
       _t.$X.utils.bus.$on('board/materials/editor/create', function () {
-        // FIXME 设置500ms延时，用于等待transition结束
+        // FIXME Set 500ms delay to wait for the end of transition
         setTimeout(_t.init, 600)
       })
       _t.$X.utils.bus.$on('board/materials/editor/add/node', _t.doAddNode)

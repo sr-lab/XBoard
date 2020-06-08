@@ -204,9 +204,9 @@
     methods: {
       doAddBoard () {
         let _t = this
-        // 更新激活项
+        // Update activation
         _t.activeIndex = _t.boardList.length
-        // 分发mutation，新增画板
+        // distribute mutation, add artboard
         _t.$store.commit('board/list/add', {
           id: new Date().getTime(),
           screenshot: ''
@@ -218,16 +218,16 @@
           title: _t.$t('L10101'),
           content: _t.$t('L10107'),
           onOk: function () {
-            // 删除一项
+            // Delete one
             _t.$store.commit('board/list/remove', index)
             _t.$nextTick(function () {
-              // 处理激活项
+              // Handling activation
               if (_t.activeIndex >= index) {
                 if (_t.activeIndex > 0) {
                   _t.activeIndex--
                 } else {
                   _t.activeIndex = 0
-                  // 广播事件
+                  // Broadcast event
                   _t.$X.utils.bus.$emit('board/list/remove')
                 }
               }

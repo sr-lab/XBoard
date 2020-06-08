@@ -37,7 +37,7 @@
         let x = _t.options.x !== undefined ? (parseInt(_t.options.x) > 0 ? parseInt(_t.options.x) : 0) : 0
         let y = _t.options.y !== undefined ? (parseInt(_t.options.y) > 0 ? parseInt(_t.options.y) : 0) : 0
         let style = {}
-        // 判断是否超出边界
+        // Determine if it is beyond the boundary
         if (document.documentElement && document.documentElement.clientHeight && document.documentElement.clientWidth) {
           let winHeight = document.documentElement.clientHeight
           let winWidth = document.documentElement.clientWidth
@@ -74,7 +74,7 @@
       },
       doHide () {
         let _t = this
-        // 重置options
+        // Reset options
         _t.initOptions()
         _t.isShow = false
       }

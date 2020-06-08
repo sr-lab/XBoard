@@ -8,26 +8,26 @@ const Util = require('../util/index');
 const Global = require('../global');
 const SingleShapeMixin = require('./single-shape-mixin');
 
-// 注册 Node 的工厂方法
+// Register Node's factory method
 Shape.registerFactory('node', {
   defaultShapeType: 'circle'
 });
 
 const singleNodeDefinition = Util.mix({}, SingleShapeMixin, {
   itemType: 'node',
-  // 单个图形的类型
+  // Types of individual graphics
   shapeType: '',
   /**
-   * 文本相对图形的位置，默认以中心点
-   * 位置包括： top, bottom, left, right, center
+   * The position of the text relative to the graphic, the default is the center point
+   * Positions include: top, bottom, left, right, center
    * @type {String}
    */
   labelPosition: 'center',
   /**
-   * 获取节点宽高
-   * @internal 返回节点的大小，以 [width, height] 的方式维护
-   * @param  {Object} cfg 节点的配置项
-   * @return {Array} 宽高
+   * Get node width and height
+   * @internal returns the size of the node, maintained in the manner of [width, height]
+   * @param {Object} cfg node configuration items
+   * @return {Array} width and height
    */
   getSize(cfg) {
     let size = cfg.size || Global.defaultNode.size;
@@ -36,10 +36,10 @@ const singleNodeDefinition = Util.mix({}, SingleShapeMixin, {
     }
     return size;
   },
-  // 私有方法，不希望扩展的节点复写这个方法
+  // Private method, this method is not replicated by nodes that do not want to expand
   getLabelStyleByPosition(cfg, labelCfg) {
     const labelPosition = labelCfg.position || this.labelPosition;
-    // 默认的位置（最可能的情形），所以放在最上面
+    // The default position (the most likely case), so put it on top
     if (labelPosition === 'center') {
       return { x: 0, y: 0 };
     }
@@ -47,8 +47,8 @@ const singleNodeDefinition = Util.mix({}, SingleShapeMixin, {
     const width = size[0];
     const height = size[1];
     let offset = labelCfg.offset;
-    if (Util.isNil(offset)) { // 考虑 offset = 0 的场景，不用用 labelCfg.offset || Global.nodeLabel.offset
-      offset = Global.nodeLabel.offset; // 不居中时的偏移量
+    if (Util.isNil(offset)) { // Consider the scenario with offset = 0, instead of labelCfg.offset || Global.nodeLabel.offset
+      offset = Global.nodeLabel.offset; // Offset when not centered
     }
     let style;
     switch (labelPosition) {
@@ -56,7 +56,7 @@ const singleNodeDefinition = Util.mix({}, SingleShapeMixin, {
         style = {
           x: 0,
           y: 0 - height / 2 - offset,
-          textBaseline: 'bottom' // 文本在图形的上面
+          textBaseline: 'bottom' // The text is above the graphic
         };
         break;
       case 'bottom':
@@ -84,7 +84,7 @@ const singleNodeDefinition = Util.mix({}, SingleShapeMixin, {
     return style;
   },
   drawShape(cfg, group) {
-    const shapeType = this.shapeType; // || this.type，都已经加了 shapeType
+    const shapeType = this.shapeType; // || this.type，Have added shapeType
     const style = this.getShapeStyle(cfg);
     const shape = group.addShape(shapeType, {
       attrs: style
@@ -92,11 +92,11 @@ const singleNodeDefinition = Util.mix({}, SingleShapeMixin, {
     return shape;
   }
 });
-// 单个图形的基础，可以有 label，默认 label 居中
+// The basis of a single figure can have a label, the default label is centered
 Shape.registerNode('single-shape', singleNodeDefinition);
 
 /**
- * 基本的圆，可以添加文本，默认文本居中
+ * Basic circle, you can add text, the default text is centered
  */
 Shape.registerNode('circle', {
   shapeType: 'circle',
@@ -104,9 +104,9 @@ Shape.registerNode('circle', {
     const size = this.getSize(cfg);
     const color = cfg.color || Global.defaultNode.color;
     const style = Util.mix({}, {
-      x: 0, // 节点的位置在上层确定，所以这里仅使用相对位置即可
+      x: 0, // The position of the node is determined in the upper layer, so here only the relative position can be used
       y: 0,
-      r: size[0] / 2, // size 一般可以提供宽高信息
+      r: size[0] / 2, // size can generally provide width and height information
       stroke: color
     }, Global.defaultNode.style, cfg.style);
     return style;
@@ -114,7 +114,7 @@ Shape.registerNode('circle', {
 }, 'single-shape');
 
 /**
- * 基本的椭圆，可以添加文本，默认文本居中
+ * Basic ellipse, you can add text, the default text is centered
  */
 Shape.registerNode('ellipse', {
   shapeType: 'ellipse',
@@ -124,9 +124,9 @@ Shape.registerNode('ellipse', {
     const ry = size[1] / 2;
     const color = cfg.color || Global.defaultNode.color;
     const style = Util.mix({}, {
-      x: 0, // 节点的位置在上层确定，所以这里仅使用相对位置即可
+      x: 0, // The position of the node is determined in the upper layer, so here only the relative position can be used
       y: 0,
-      rx, // size 一般可以提供宽高信息
+      rx, // size can generally provide width and height information
       ry,
       stroke: color
     }, Global.defaultNode.style, cfg.style);
@@ -135,7 +135,7 @@ Shape.registerNode('ellipse', {
 }, 'single-shape');
 
 /**
- * 基本的矩形，可以添加文本，默认文本居中
+ * Basic rectangle, you can add text, the default text is centered
  */
 Shape.registerNode('rect', {
   shapeType: 'rect',
@@ -145,7 +145,7 @@ Shape.registerNode('rect', {
     const height = size[1];
     const color = cfg.color || Global.defaultNode.color;
     const style = Util.mix({}, Global.defaultNode.style, {
-      x: 0 - width / 2, // 节点的位置在上层确定，所以这里仅使用相对位置即可
+      x: 0 - width / 2, // The position of the node is determined in the upper layer, so here only the relative position can be used
       y: 0 - height / 2,
       width,
       height,
@@ -156,7 +156,7 @@ Shape.registerNode('rect', {
 }, 'single-shape');
 
 /**
- * 基本的图片，可以添加文本，默认文本在图片的下面
+ * Basic pictures, you can add text, the default text is below the picture
  */
 Shape.registerNode('image', {
   shapeType: 'image',
@@ -167,7 +167,7 @@ Shape.registerNode('image', {
     const width = size[0];
     const height = size[1];
     const style = Util.mix({}, {
-      x: 0 - width / 2, // 节点的位置在上层确定，所以这里仅使用相对位置即可
+      x: 0 - width / 2, // The position of the node is determined in the upper layer, so here only the relative position can be used
       y: 0 - height / 2,
       width,
       height,

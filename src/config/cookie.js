@@ -12,7 +12,7 @@ export default {
     token: 't',
     locale: 'l'
   },
-  // 退出时无需清除的cookie key
+  // cookie key - No need to clear when exiting
   unless: ['locale'],
   getItem (key) {
     return key ? this.prefix + this.items[key] : ''

@@ -52,14 +52,14 @@ module.exports = {
     this._update(this.target, e, true);
     this.point = null;
     this.origin = null;
-    // 终止时需要判断此时是否在监听画布外的 mouseup 事件，若有则解绑
+    // When terminating, you need to determine whether you are monitoring the mouseup event outside the canvas at this time.
     const fn = this.fn;
     if (fn) {
       body.removeEventListener('mouseup', fn, false);
       this.fn = null;
     }
   },
-  // 若在拖拽时，鼠标移出画布区域，此时放开鼠标无法终止 drag 行为。在画布外监听 mouseup 事件，放开则终止
+  // If the mouse moves out of the canvas area while dragging, releasing the mouse at this time cannot terminate the drag behavior. Monitor the mouseup event outside the canvas, and terminate it when it is released
   onOutOfRange(e) {
     const self = this;
     if (this.origin) {
@@ -104,7 +104,7 @@ module.exports = {
     if (!shape) {
       const parent = self.graph.get('group');
       const attrs = mix({}, delegateStyle, this.delegateStyle);
-      // model上的x, y是相对于图形中心的，delegateShape是g实例，x,y是绝对坐标
+      // x, y on the model are relative to the center of the graph, delegateShape is the instance of g, and x, y are the absolute coordinates
       shape = parent.addShape('rect', {
         attrs: {
           width: bbox.width,

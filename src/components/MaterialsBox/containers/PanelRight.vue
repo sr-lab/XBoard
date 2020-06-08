@@ -8,7 +8,7 @@
 
 <template>
   <CardBox placement="right" :width="300">
-    <!-- FIXME 暂时注掉Options配置面板，该功能与ToolBar存在高度耦合 -->
+    <!-- FIXME Temporarily note the Options configuration panel, this function is highly coupled with ToolBar -->
     <!--
     <CardItem title="配置" :enableFold="true">
       <Options></Options>

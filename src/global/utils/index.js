@@ -10,7 +10,7 @@ import file from './file'
 export default {
   bus,
   filters,
-  // 排序
+  // Sort
   sort,
   file
 }

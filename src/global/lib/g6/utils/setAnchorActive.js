@@ -12,7 +12,7 @@ export default function (name, value, item) {
     let children = group.get('children')
     for (let i = 0, len = children.length; i < len; i++) {
       let child = children[i]
-      // 处理锚点状态
+      // Handle anchor status
       if (child._attrs.name === 'anchor') {
         if (value) {
           child.attr(config.anchor.style.hover)

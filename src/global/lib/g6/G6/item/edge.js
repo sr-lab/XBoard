@@ -6,8 +6,8 @@
 const Util = require('../util/');
 const Item = require('./item');
 const END_MAP = { source: 'start', target: 'end' };
-const ITEM_NAME_SUFFIX = 'Node'; // 端点的后缀，如 sourceNode, targetNode
-const POINT_NAME_SUFFIX = 'Point'; // 起点或者结束点的后缀，如 startPoint, endPoint
+const ITEM_NAME_SUFFIX = 'Node'; // Endpoint suffix, such as sourceNode, targetNode
+const POINT_NAME_SUFFIX = 'Point'; // The suffix of the start or end point, such as startPoint, endPoint
 const ANCHOR_NAME_SUFFIX = 'Anchor';
 
 class Edge extends Item {
@@ -18,13 +18,13 @@ class Edge extends Item {
       targetNode: null,
       startPoint: null,
       endPoint: null,
-      linkCenter: false // 参数名暂时没想好，是连接节点的中心，还是直接连接 x,y
+      linkCenter: false // The parameter name is not thought about for the time being, is it connected to the center of the node, or directly connected to x,y
     };
   }
 
   init() {
     super.init();
-    // 初始化两个端点
+    // Initialize two endpoints
     this.setSource(this.get('source'));
     this.setTarget(this.get('target'));
   }
@@ -48,8 +48,8 @@ class Edge extends Item {
   }
 
   /**
-   * 边不需要重计算容器位置，直接重新计算 path 位置
-   * @param {object} cfg 待更新数据
+   * The edge does not need to recalculate the container position, directly recalculate the path position
+   * @param {object} cfg data to be updated
    */
   update(cfg) {
     const model = this.get('model');
@@ -61,13 +61,13 @@ class Edge extends Item {
 
   updatePosition() {}
 
-  // 设置端点：起点或者结束点
+  // Set endpoint: start or end point
   _setEnd(name, value) {
     const pointName = END_MAP[name] + POINT_NAME_SUFFIX;
     const itemName = name + ITEM_NAME_SUFFIX;
     const preItem = this.get(itemName);
-    preItem && preItem.removeEdge(this); // 如果之前存在节点，则移除掉边
-    if (Util.isPlainObject(value)) { // 如果设置成具体的点，则清理节点
+    preItem && preItem.removeEdge(this); // If there was a node before, remove the edge
+    if (Util.isPlainObject(value)) { // If set to a specific point, then clear the node
       this.set(pointName, value);
       this.set(itemName, null);
     } else {
@@ -77,7 +77,7 @@ class Edge extends Item {
     }
   }
 
-  // 获取与端点相交的节点
+  // Get the node that intersects the endpoint
   _getLinkPoint(name, model, controlPoints) {
     const pointName = END_MAP[name] + POINT_NAME_SUFFIX;
     const itemName = name + ITEM_NAME_SUFFIX;
@@ -87,10 +87,10 @@ class Edge extends Item {
       const anchorName = name + ANCHOR_NAME_SUFFIX;
       const prePoint = this._getPrePoint(name, controlPoints);
       const anchorIndex = model[anchorName];
-      if (!Util.isNil(anchorIndex)) { // 如果有锚点，则使用锚点索引获取连接点
+      if (!Util.isNil(anchorIndex)) { // If there is an anchor point, use the anchor index to get the connection point
         point = item.getLinkPointByAnchor(anchorIndex);
       }
-      // 如果锚点没有对应的点或者没有锚点，则直接计算连接点
+      // If the anchor point has no corresponding point or no anchor point, the connection point is directly calculated
       point = point || item.getLinkPoint(prePoint);
       if (!Util.isNil(point.index)) {
         this.set(name + 'AnchorIndex', point.index);
@@ -99,17 +99,17 @@ class Edge extends Item {
     return point;
   }
 
-  // 获取同端点进行连接的点，计算交汇点
+  // Get the point connected to the end point and calculate the intersection point
   _getPrePoint(name, controlPoints) {
     if (controlPoints && controlPoints.length) {
       const index = name === 'source' ? 0 : controlPoints.length - 1;
       return controlPoints[index];
     }
-    const oppositeName = name === 'source' ? 'target' : 'source'; // 取另一个节点的位置
+    const oppositeName = name === 'source' ? 'target' : 'source'; // Take the position of another node
     return this._getEndPoint(oppositeName);
   }
 
-  // 通过端点的中心获取控制点
+  // Get control points through the center of the endpoint
   _getControlPointsByCenter(model) {
     const sourcePoint = this._getEndPoint('source');
     const targetPoint = this._getEndPoint('target');
@@ -120,15 +120,15 @@ class Edge extends Item {
     });
   }
 
-  // 获取端点的位置
+  // Get the location of the endpoint
   _getEndPoint(name) {
     const itemName = name + ITEM_NAME_SUFFIX;
     const pointName = END_MAP[name] + POINT_NAME_SUFFIX;
     const item = this.get(itemName);
-      // 如果有端点，直接使用 model
+      // If there is an endpoint, use model directly
     if (item) {
       return item.get('model');
-    }  // 否则直接使用点
+    }  // Otherwise use points directly
     return this.get(pointName);
   }
 
@@ -136,20 +136,20 @@ class Edge extends Item {
     const itemName = name + ITEM_NAME_SUFFIX;
     const pointName = END_MAP[name] + POINT_NAME_SUFFIX;
     const item = this.get(itemName);
-      // 如果有端点，直接使用 model
+      // If there is an endpoint, use model directly
     if (item) {
       const bbox = item.getBBox();
       return {
         x: bbox.centerX,
         y: bbox.centerY
       };
-    }  // 否则直接使用点
+    }  // Otherwise use points directly
     return this.get(pointName);
   }
 
   getShapeCfg(model) {
     const self = this;
-    const linkCenter = self.get('linkCenter'); // 如果连接到中心，忽视锚点、忽视控制点
+    const linkCenter = self.get('linkCenter'); // If connected to the center, ignore the anchor point and the control point
     const cfg = super.getShapeCfg(model);
     if (linkCenter) {
       cfg.startPoint = self._getEndCenter('source');

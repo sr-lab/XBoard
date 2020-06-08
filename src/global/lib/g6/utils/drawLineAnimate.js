@@ -13,10 +13,10 @@ export default function (cfg, group) {
     return
   }
   let circleName = 'edgeAnimatePoint'
-  // 查找已有圆点
+  // Find existing dots
   let circle = group.find(item => item.name === circleName)
   if (!circle) {
-    // 添加红色圆点
+    // Add red dots
     circle = group.addShape('circle', {
       id: cfg.id + '_edge_animate_point_',
       name: circleName,
@@ -28,7 +28,7 @@ export default function (cfg, group) {
     })
   }
 
-  // 对红色圆点添加动画
+  // Animate red dots
   circle.animate({
     onFrame (ratio) {
       let tmpPoint = node.getPoint(ratio)

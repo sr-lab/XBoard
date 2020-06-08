@@ -5,7 +5,7 @@
  */
 
 export default {
-  // 日期格式化
+  // Date formatting
   formatDate: (date, fmt = 'YYYY-MM-DD hh:mm') => {
     if (!(date instanceof Date)) {
       date = new Date(date)

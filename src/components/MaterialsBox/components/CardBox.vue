@@ -30,7 +30,7 @@
 <template>
   <div class="card-box" :style="boxStyle">
     <div class="handler">
-      <!-- 折叠 -->
+      <!-- Fold -->
       <XIcon :type="foldIcon" style="margin: 0 10px" @click.native="handleFoldClick"></XIcon>
     </div>
     <slot></slot>
@@ -45,7 +45,7 @@
         type: Number,
         default: 300
       },
-      // 显示位置
+      // Show location
       placement: {
         type: String,
         default: 'right'
@@ -53,7 +53,7 @@
     },
     data () {
       return {
-        // 是否折叠
+        // Whether to fold
         isFold: false
       }
     },
@@ -67,7 +67,7 @@
         if (_t.width) {
           style.width = _t.width + 'px'
         }
-        // 处理折叠
+        // Handle folding
         if (_t.isFold) {
           style.width = '36px'
         }

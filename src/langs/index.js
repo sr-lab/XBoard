@@ -3,11 +3,12 @@
  *
  *
  */
-// 导入iview语言包
+
+// Import iview language pack
 import _en from 'iview/dist/locale/en-US'
 import _zh from 'iview/dist/locale/zh-CN'
 
-// 导入系统语言包
+// Import system language pack
 import zh from './zh-CN'
 import en from './en-US'
 

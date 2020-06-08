@@ -1,5 +1,5 @@
 /**
- * @fileOverview 自定义 Shape 的基类
+ * @fileOverview Base class for custom Shape
  * @author dxq613@gmail.com
  */
 
@@ -7,26 +7,26 @@
 const Util = require('../util/');
 require('./extend/group');
 const Shape = {};
-const cache = {}; // ucfirst 开销过大，进行缓存
-// 首字母大写
+const cache = {}; // ucfirst overhead is too large, cache
+// Capitalize the first letter
 function ucfirst(str) {
   return cache[str] || Util.upperFirst(str);
 }
 
 /**
- * 工厂方法的基类
+ * Base class for factory methods
  * @type Shape.FactoryBase
  */
 const ShapeFactoryBase = {
   /**
-   * 默认的形状，当没有指定/匹配 shapeType 时，使用默认的
+   * The default shape, when no shapeType is specified/matched, the default
    * @type {String}
    */
   defaultShapeType: null,
   /**
-   * 获取绘制 Shape 的工具类，无状态
-   * @param  {String} type 类型
-   * @return {Object} 工具类
+   * Get the tool class for drawing Shape, stateless
+   * @param {String} type
+   * @return {Object} tool class
    */
   getShape(type) {
     const self = this;
@@ -34,11 +34,11 @@ const ShapeFactoryBase = {
     return shape;
   },
   /**
-   * 绘制图形
-   * @param  {String} type  类型
-   * @param  {Object} cfg 配置项
-   * @param  {G.Group} group 图形的分组
-   * @return {G.Shape} 图形对象
+   * Draw graphics
+   * @param {String} type
+   * @param {Object} cfg configuration item
+   * @param {G.Group} group Graphic grouping
+   * @return {G.Shape} graphic object
    */
   draw(type, cfg, group) {
     const shape = this.getShape(type);
@@ -47,33 +47,33 @@ const ShapeFactoryBase = {
     return rst;
   },
   /**
-   * 更新
-   * @param  {String} type  类型
-   * @param  {Object} cfg 配置项
-   * @param  {G6.Item} item 节点、边、分组等
+   * Update
+   * @param {String} type
+   * @param {Object} cfg configuration item
+   * @param {G6.Item} item node, edge, grouping, etc.
    */
   update(type, cfg, item) {
     const shape = this.getShape(type);
-    if (shape.update) { // 防止没定义 update 函数
+    if (shape.update) { // Prevent undefined update function
       shape.update(cfg, item);
       shape.afterUpdate(cfg, item);
     }
   },
   /**
-   * 设置状态
-   * @param {String} type  类型
-   * @param {String} name  状态名
-   * @param {String} value 状态值
-   * @param {G6.Item} item  节点、边、分组等
+   * Set status
+   * @param {String} type
+   * @param {String} name state name
+   * @param {String} value status value
+   * @param {G6.Item} item node, edge, grouping, etc.
    */
   setState(type, name, value, item) {
     const shape = this.getShape(type);
     shape.setState(name, value, item);
   },
   /**
-   * 是否允许更新，不重新绘制图形
-   * @param  {String} type 类型
-   * @return {Boolean} 是否允许使用更新
+   * Whether to allow updating without redrawing graphics
+   * @param {String} type
+   * @return {Boolean} whether update is allowed
    */
   shouldUpdate(type) {
     const shape = this.getShape(type);
@@ -84,10 +84,10 @@ const ShapeFactoryBase = {
     return shape.getControlPoints(cfg);
   },
   /**
-   * 获取控制点
-   * @param {String} type 节点、边类型
-   * @param  {Object} cfg 节点、边的配置项
-   * @return {Array|null} 控制点的数组,如果为 null，则没有控制点
+   * Get control points
+   * @param {String} type node, edge type
+   * @param {Object} cfg node and edge configuration items
+   * @return {Array|null} Array of control points, if null, no control points
    */
   getAnchorPoints(type, cfg) {
     const shape = this.getShape(type);
@@ -96,56 +96,56 @@ const ShapeFactoryBase = {
 };
 
 /**
- * 绘制元素的工具类基类
+ * Base class for tools that draw elements
  * @class Shape.ShapeBase
  */
 const ShapeBase = {
   /**
-   * 绘制
+   * draw
    */
   draw(/* cfg, group */) {
 
   },
   /**
-   * 绘制完成后的操作，便于用户继承现有的节点、边
+   * After the drawing is completed, it is convenient for the user to inherit the existing nodes and edges
    */
   afterDraw(/* cfg, group */) {
 
   },
-  // update(cfg, item) // 默认不定义
+  // update(cfg, item) // Not defined by default
   afterUpdate(/* cfg, item */) {
 
   },
   /**
-   * 设置节点、边状态
+   *
    */
   setState(/* name, value, item */) {
 
   },
   /**
-   * 获取控制点
-   * @param  {Object} cfg 节点、边的配置项
-   * @return {Array|null} 控制点的数组,如果为 null，则没有控制点
+   * Get control points
+   * @param {Object} cfg node and edge configuration items
+   * @return {Array|null} Array of control points, if null, no control points
    */
   getControlPoints(cfg) {
     return cfg.controlPoints;
   },
   /**
-   * 获取控制点
-   * @param  {Object} cfg 节点、边的配置项
-   * @return {Array|null} 控制点的数组,如果为 null，则没有控制点
+   * Get control points
+   * @param {Object} cfg node and edge configuration items
+   * @return {Array|null} Array of control points, if null, no control points
    */
   getAnchorPoints(cfg) {
     return cfg.anchorPoints;
   }
-  /* 如果没定义 update 方法，每次都调用 draw 方法
+  /* If the update method is not defined, the draw method is called every time
   update(cfg, item) {
 
   }
   */
 };
 
-// 注册 Geometry 获取图形的入口
+// Register Geometry to get the entrance of the graphics
 Shape.registerFactory = function(factoryType, cfg) {
   const className = ucfirst(factoryType);
   const shapeFactory = Util.mix({}, ShapeFactoryBase, cfg);
@@ -155,7 +155,7 @@ Shape.registerFactory = function(factoryType, cfg) {
   return shapeFactory;
 };
 
-// 统一 registerNode, registerEdge, registerGuide 的实现
+// Unified implementation of registerNode, registerEdge, registerGuide
 function addRegister(shapeFactory) {
   const functionName = 'register' + shapeFactory.className;
   Shape[functionName] = function(shapeType, cfg, extendShapeType) {
@@ -167,7 +167,7 @@ function addRegister(shapeFactory) {
   };
 }
 
-// 获得 ShapeFactory
+// Get ShapeFactory
 Shape.getFactory = function(factoryType) {
   const self = this;
   factoryType = ucfirst(factoryType);

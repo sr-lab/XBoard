@@ -8,7 +8,7 @@ const Shape = require('../shape');
 const Global = require('../global');
 const CACHE_BBOX = 'bboxCache';
 const GLOBAL_STATE_STYLE_SUFFIX = 'StateStyle';
-const NAME_STYLE = 'Style'; // cache 缓存的状态属性的名字
+const NAME_STYLE = 'Style'; // cache The name of the cached state attribute
 const RESERVED_STYLES = [ 'fillStyle', 'strokeStyle', 'path', 'points', 'img', 'symbol' ];
 
 class Item {
@@ -21,7 +21,7 @@ class Item {
       id: null,
 
       /**
-       * 类型
+       * Types of
        * @type {string}
        */
       type: 'item',
@@ -79,28 +79,28 @@ class Item {
   }
 
   /**
-   * 是否是 Item 对象，悬空边情况下进行判定
-   * @return {Boolean} 是否是 Item 对象
+   * Whether it is an Item object, judge if there is an empty edge
+   * @return {Boolean} is an Item object
    */
   isItem() {
     return true;
   }
 
   /**
-   * 获取属性
-   * @internal 仅内部类使用
-   * @param  {String} key 属性名
-   * @return {*} 属性值
+   * Get attributes
+   * @internal only for internal classes
+   * @param {String} key property name
+   * @return {*} attribute value
    */
   get(key) {
     return this._cfg[key];
   }
 
   /**
-   * 设置属性
-   * @internal 仅内部类使用
-   * @param {String|Object} key 属性名，也可以是对象
-   * @param {*} val 属性值
+   * Set properties
+   * @internal only for internal classes
+   * @param {String|Object} key property name, can also be an object
+   * @param {*} val attribute value
    */
   set(key, val) {
     if (Util.isPlainObject(key)) {
@@ -110,26 +110,26 @@ class Item {
     }
   }
   /**
-   * 获取默认的配置项
-   * @protected 供子类复写
-   * @return {Object} 配置项
+   * Get the default configuration items
+   * @protected for subclass replication
+   * @return {Object} configuration item
    */
   getDefaultCfg() {
     return {};
   }
   /**
-   * 初始化
+   * initialization
    * @protected
    */
   init() {
     const shapeFactory = Shape.getFactory(this.get('type'));
     this.set('shapeFactory', shapeFactory);
   }
-  // 根据 keyshape 计算包围盒
+  // Calculate the bounding box according to keyshape
   _calculateBBox() {
     const keyShape = this.get('keyShape');
     const group = this.get('group');
-    // 因为 group 可能会移动，所以必须通过父元素计算才能计算出正确的包围盒
+    // Because group may move, it must be calculated by the parent element to calculate the correct bounding box
     const bbox = Util.getBBox(keyShape, group);
     bbox.x = bbox.minX;
     bbox.y = bbox.minY;
@@ -140,7 +140,7 @@ class Item {
     return bbox;
   }
 
-  // 绘制
+  // draw
   _drawInner() {
     const self = this;
     const shapeFactory = self.get('shapeFactory');
@@ -152,7 +152,7 @@ class Item {
       return;
     }
     self.updatePosition(model);
-    const cfg = self.getShapeCfg(model); // 可能会附加额外信息
+    const cfg = self.getShapeCfg(model); // Additional information may be added
     const shapeType = cfg.shape;
     const keyShape = shapeFactory.draw(shapeType, cfg, group);
     if (keyShape) {
@@ -160,7 +160,7 @@ class Item {
       self.set('keyShape', keyShape);
       self.set('originStyle', this.getKeyShapeStyle());
     }
-    // 防止由于用户外部修改 model 中的 shape 导致 shape 不更新
+    // Prevent the shape from being updated due to the user's external modification of the shape in the model
     this.set('currentShape', shapeType);
     this._resetStates(shapeFactory, shapeType);
   }
@@ -187,17 +187,17 @@ class Item {
   }
 
   /**
-   * 获取当前元素的所有状态
-   * @return {Array} 元素的所有状态
+   * Get all states of the current element
+   * All states of @return {Array} elements
    */
   getStates() {
     return this.get('states');
   }
 
   /**
-   * 当前元素是否处于某状态
-   * @param {String} state 状态名
-   * @return {Boolean} 是否处于某状态
+   * Whether the current element is in a certain state
+   * @param {String} state state name
+   * @return {Boolean} is in a certain state
    */
   hasState(state) {
     return this.get('states').indexOf(state) >= 0;
@@ -209,7 +209,7 @@ class Item {
     const globalStyle = Global[self.getType() + GLOBAL_STATE_STYLE_SUFFIX][state];
     const styles = this.get('styles');
     const defaultStyle = styles && styles[state];
-    // 状态名 + style（activeStyle) 存储在 item 中，如果 item 中不存在这些信息，则使用默认的样式
+    // State name + style (activeStyle) is stored in item, if the information does not exist in item, the default style is used
     const fieldName = state + NAME_STYLE;
     return Util.mix({}, globalStyle, defaultStyle, self.get(fieldName));
   }
@@ -228,10 +228,10 @@ class Item {
   }
 
   /**
-   * 更改元素状态， visible 不属于这个范畴
-   * @internal 仅提供内部类 graph 使用
-   * @param {String} state 状态名
-   * @param {Boolean} enable 节点状态值
+   * Change the state of the element, visible does not belong to this category
+   * @internal only provides internal graph usage
+   * @param {String} state state name
+   * @param {Boolean} enable node status value
    */
   setState(state, enable) {
     const states = this.get('states');
@@ -275,32 +275,32 @@ class Item {
   }
 
   /**
-   * 节点的图形容器
-   * @return {G.Group} 图形容器
+   * Graph container for nodes
+   * @return {G.Group} graphics container
    */
   getContainer() {
     return this.get('group');
   }
 
   /**
-   * 节点的关键形状，用于计算节点大小，连线截距等
-   * @return {G.Shape} 关键形状
+   * The key shape of the node, used to calculate the node size, line intercept, etc.
+   * @return {G.Shape} key shape
    */
   getKeyShape() {
     return this.get('keyShape');
   }
 
   /**
-   * 节点数据模型
-   * @return {Object} 数据模型
+   * Node data model
+   * @return {Object} data model
    */
   getModel() {
     return this.get('model');
   }
 
   /**
-   * 节点类型
-   * @return {string} 节点的类型
+   * Node type
+   * @return {string} node type
    */
   getType() {
     return this.get('type');
@@ -308,14 +308,14 @@ class Item {
 
 
   /**
-   * 渲染前的逻辑，提供给子类复写
+   * The logic before rendering is provided to subclasses for replication
    * @protected
    */
   beforeDraw() {
 
   }
   /**
-   * 渲染后的逻辑，提供给子类复写
+   * Rendered logic, provided to subclasses for replication
    * @protected
    */
   afterDraw() {
@@ -325,7 +325,7 @@ class Item {
   getShapeCfg(model) {
     const styles = this.get('styles');
     if (styles && styles.default) {
-      // merge graph的item样式与数据模型中的样式
+      // Item style of merge graph and style in data model
       const newModel = Util.mix({}, model);
       newModel.style = Util.mix({}, styles.default, model.style);
       return newModel;
@@ -334,40 +334,40 @@ class Item {
   }
 
   /**
-   * 刷新一般用于处理几种情况
-   * 1. item model 在外部被改变
-   * 2. 边的节点位置发生改变，需要重新计算边
+   * Refresh is generally used to deal with several situations
+   * 1. Item model is changed externally
+   * 2. The node position of the edge has changed, and the edge needs to be recalculated
    *
-   * 因为数据从外部被修改无法判断一些属性是否被修改，直接走位置和 shape 的更新
+   * Because the data is modified from the outside, it is impossible to judge whether some attributes are modified, and directly update the position and shape
    */
   refresh() {
     const model = this.get('model');
-    // 更新元素位置
+    // Update element position
     this.updatePosition(model);
-    // 更新元素内容，样式
+    // Update element content, style
     this.updateShape();
-    // 做一些更新之后的操作
+    // Do some operations after updating
     this.afterUpdate();
-    // 清除缓存
+    // clear cache
     this.clearCache();
   }
 
   /**
-   * 将更新应用到 model 上，刷新属性
-   * @internal 仅提供给 Graph 使用，外部直接调用 graph.update 接口
-   * @param  {Object} cfg       配置项，可以是增量信息
+   * Apply the update to the model and refresh the properties
+   * @internal is only available for Graph, externally call graph.update interface directly
+   * @param {Object} cfg configuration item, which can be incremental information
    */
   update(cfg) {
     const model = this.get('model');
     const originPosition = { x: model.x, y: model.y };
-    // 直接将更新合到原数据模型上，可以保证用户在外部修改源数据然后刷新时的样式符合期待。
+    // The update is directly integrated into the original data model to ensure that the user can modify the source data externally and then refresh the style as expected.
     Util.mix(model, cfg);
     const onlyMove = this._isOnlyMove(cfg);
-    // 仅仅移动位置时，既不更新，也不重绘
+    // When only moving the position, neither update nor redraw
     if (onlyMove) {
       this.updatePosition(model);
     } else {
-      // 如果 x,y 有变化，先重置位置
+      // If x,y changes, reset the position first
       if (originPosition.x !== model.x || originPosition.y !== model.y) {
         this.updatePosition(model);
       }
@@ -378,30 +378,30 @@ class Item {
   }
 
   /**
-   * 更新元素内容，样式
+   * If x,y changes, reset the position first
    */
   updateShape() {
     const shapeFactory = this.get('shapeFactory');
     const model = this.get('model');
     const shape = model.shape;
-    // 判定是否允许更新
-    // 1. 注册的节点允许更新
-    // 2. 更新后的 shape 等于原先的 shape
+    // Determine whether update is allowed
+    // 1. The registered node allows updating
+    // 2. The updated shape is equal to the original shape
     if (shapeFactory.shouldUpdate(shape) && shape === this.get('currentShape')) {
       const updateCfg = this.getShapeCfg(model);
       shapeFactory.update(shape, updateCfg, this);
     } else {
-      // 如果不满足上面两种状态，重新绘制
+      // If the above two states are not met, redraw
       this.draw();
     }
     this.set('originStyle', this.getKeyShapeStyle());
-    // 更新后重置节点状态
+    // Reset node status after update
     this._resetStates(shapeFactory, shape);
   }
 
   /**
-   * 更新位置，避免整体重绘
-   * @param {object} cfg 待更新数据
+   * Update location to avoid overall redraw
+   * @param {object} cfg data to be updated
    */
   updatePosition(cfg) {
     const model = this.get('model');
@@ -417,11 +417,11 @@ class Item {
     group.translate(x, y);
     model.x = x;
     model.y = y;
-    this.clearCache();     // 位置更新后需要清除缓存
+    this.clearCache();     // Need to clear cache after location update
   }
 
   /**
-   * 更新后做一些工作
+   * Do some work after update
    * @protected
    */
   afterUpdate() {
@@ -429,14 +429,14 @@ class Item {
   }
 
   /**
-   * 更新/刷新等操作后，清除 cache
+   * After operations such as update/refresh, clear the cache
    */
   clearCache() {
     this.set(CACHE_BBOX, null);
   }
 
   /**
-   * 绘制元素
+   * Draw elements
    */
   draw() {
     this.beforeDraw();
@@ -445,12 +445,12 @@ class Item {
   }
 
   /**
-   * 获取元素的包围盒
-   * @return {Object} 包含 x,y,width,height, centerX, centerY
+   * Get the bounding box of an element
+   * @return {Object} contains x,y,width,height, centerX, centerY
    */
   getBBox() {
     let bbox = this.get(CACHE_BBOX);
-    if (!bbox) { // 计算 bbox 开销有些大，缓存
+    if (!bbox) { // Calculate bbox overhead is a bit large, cache
       bbox = this._calculateBBox();
       this.set(CACHE_BBOX, bbox);
     }
@@ -458,36 +458,36 @@ class Item {
   }
 
   /**
-   * 将元素放到最前面
+   * Bring the element to the front
    */
   toFront() {
     this.get('group').toFront();
   }
 
   /**
-   * 将元素放到最后面
+   * Put the element to the end
    */
   toBack() {
     this.get('group').toBack();
   }
 
   /**
-   * 显示元素
+   * Display element
    */
   show() {
     this.changeVisibility(true);
   }
 
   /**
-   * 隐藏元素
+   * Hidden element
    */
   hide() {
     this.changeVisibility(false);
   }
 
   /**
-   * 更改是否显示
-   * @param  {Boolean} visible 是否显示
+   * Change whether to show
+   * @param {Boolean} visible is displayed
    */
   changeVisibility(visible) {
     const group = this.get('group');
@@ -500,8 +500,8 @@ class Item {
   }
 
   /**
-   * 是否拾取及出发该元素的交互事件
-   * @param {Boolean} enable 标识位
+   * Whether to pick up and start the interactive event of the element
+   * @param {Boolean} enable flag
    */
   enableCapture(enable) {
     const group = this.get('group');
@@ -512,7 +512,7 @@ class Item {
     return this.get('visible');
   }
   /**
-   * 析构函数
+   * Destructor
    */
   destroy() {
     if (!this.destroyed) {

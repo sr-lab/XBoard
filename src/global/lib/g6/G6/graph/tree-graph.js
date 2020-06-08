@@ -16,18 +16,18 @@ function indexOfChild(children, child) {
 class TreeGraph extends Graph {
   constructor(cfg) {
     super(cfg);
-    // 用于缓存动画结束后需要删除的节点
+    // Used to cache the nodes that need to be deleted after the animation ends
     this.set('removeList', []);
     this.set('layoutMethod', this._getLayout());
   }
   getDefaultCfg() {
     const cfg = super.getDefaultCfg();
-    // 树图默认打开动画
+    // Tree map opens animation by default
     cfg.animate = true;
     return cfg;
   }
   /**
-   * 根据data接口的数据渲染视图
+   * Render the view according to the data of the data interface
    */
   render() {
     const self = this;
@@ -41,13 +41,13 @@ class TreeGraph extends Graph {
     self.emit('afterrender');
   }
   /**
-   * 添加子树到对应 id 的节点
-   * @param {object} data 子树数据模型
-   * @param {string} parent 子树的父节点id
+   * Add a subtree to the node with the corresponding id
+   * @param {object} data subtree data model
+   * @param {string} parent The parent node id of the subtree
    */
   addChild(data, parent) {
     const self = this;
-    // 将数据添加到源数据中，走changeData方法
+    // Add data to the source data, take the changeData method
     if (!Util.isString(parent)) {
       parent = parent.get('id');
     }
@@ -58,11 +58,11 @@ class TreeGraph extends Graph {
     parentData.children.push(data);
     self.changeData();
   }
-  // 计算好layout的数据添加到graph中
+  // The calculated layout data is added to the graph
   _addChild(data, parent, animate) {
     const self = this;
     const model = data.data;
-    // model 中应存储真实的数据，特别是真实的 children
+    // The model should store real data, especially real children
     model.x = data.x;
     model.y = data.y;
     model.depth = data.depth;
@@ -89,15 +89,15 @@ class TreeGraph extends Graph {
       }
       self.addItem('edge', { source: parent, target: node, id: parent.get('id') + ':' + node.get('id') });
     }
-    // 渲染到视图上应参考布局的children, 避免多绘制了收起的节点
+    // When rendering to the view, you should refer to the children of the layout to avoid drawing more collapsed nodes
     Util.each(data.children, child => {
       self._addChild(child, node, animate);
     });
     return node;
   }
   /**
-   * 更新数据模型，差量更新并重新渲染
-   * @param {object} data 数据模型
+   * Update the data model, update the difference and re-render
+   * @param {object} data data model
    */
   changeData(data) {
     const self = this;
@@ -109,20 +109,20 @@ class TreeGraph extends Graph {
     }
   }
   /**
-   * 更新源数据，差量更新子树
-   * @param {object} data 子树数据模型
-   * @param {string} parent 子树的父节点id
+   * Update source data, difference update subtree
+   * @param {object} data subtree data model
+   * @param {string} parent The parent node id of the subtree
    */
   updateChild(data, parent) {
     const self = this;
-    // 如果没有父节点，是全量的更新，直接重置data
+    // If there is no parent node, it is a full update, reset the data directly
     if (!parent) {
       self.changeData(data);
       return;
     }
     const parentModel = self.findById(parent).getModel();
     const current = self.findById(data.id);
-    // 如果不存在该节点，则添加
+    // If the node does not exist, add
     if (!current) {
       if (!parentModel.children) {
         parentModel.children = [ current ];
@@ -136,20 +136,20 @@ class TreeGraph extends Graph {
     self.changeData();
   }
 
-  // 将数据上的变更转换到视图上
+  // Transform changes in data to views
   _updateChild(data, parent, animate) {
     const self = this;
     const current = self.findById(data.id);
-    // 若子树不存在，整体添加即可
+    // If the subtree does not exist, add it as a whole
     if (!current) {
       self._addChild(data, parent, animate);
       return;
     }
-    // 更新新节点下所有子节点
+    // Update all child nodes under the new node
     Util.each(data.children, child => {
       self._updateChild(child, current, animate);
     });
-    // 用现在节点的children实例来删除移除的子节点
+    // Use the children instance of the current node to delete the removed child node
     const children = current.get('children');
     if (children) {
       const len = children.length;
@@ -162,7 +162,7 @@ class TreeGraph extends Graph {
               x: data.x,
               y: data.y
             }, animate);
-            // 更新父节点下缓存的子节点 item 实例列表
+            // Update the list of child node item instances cached under the parent node
             children.splice(i, 1);
           }
         }
@@ -170,7 +170,7 @@ class TreeGraph extends Graph {
     }
     const model = current.getModel();
     if (animate) {
-      // 如果有动画，先缓存节点运动再更新节点
+      // If there is animation, first cache the node motion and then update the node
       current.set('origin', {
         x: model.x,
         y: model.y
@@ -180,8 +180,8 @@ class TreeGraph extends Graph {
     current.updatePosition({ x: data.x, y: data.y });
   }
   /**
-   * 删除子树
-   * @param {string} id 子树根节点id
+   * Delete subtree
+   * @param {string} id subtree root node id
    */
   removeChild(id) {
     const self = this;
@@ -197,7 +197,7 @@ class TreeGraph extends Graph {
     }
     self.changeData();
   }
-  // 删除子节点Item对象
+  // Delete the child node Item object
   _removeChild(id, to, animate) {
     const self = this;
     const node = self.findById(id);
@@ -217,17 +217,17 @@ class TreeGraph extends Graph {
     }
   }
   /**
-   * 导出图数据
+   * Export graph data
    * @return {object} data
    */
   save() {
     return this.get('data');
   }
   /**
-   * 根据id获取对应的源数据
-   * @param {string|object} id 元素id
-   * @param {object} parent 从哪个节点开始寻找，为空时从根节点开始查找
-   * @return {object} 对应源数据
+   * Get the corresponding source data according to id
+   * @param {string|object} id element id
+   * @param {object} parent From which node to start searching, when empty, start from the root
+   * @return {object} corresponds to the source data
    */
   findDataById(id, parent) {
     const self = this;
@@ -251,8 +251,8 @@ class TreeGraph extends Graph {
     return result;
   }
   /**
-   * 更改并应用树布局算法
-   * @param {object} layout 布局算法
+   * Change and apply the tree layout algorithm
+   * @param {object} layout layout algorithm
    */
   changeLayout(layout) {
     const self = this;
@@ -266,8 +266,8 @@ class TreeGraph extends Graph {
   }
 
   /**
-   * 根据目前的 data 刷新布局，更新到画布上。用于变更数据之后刷新视图。
-   * @param {boolean} fitView 更新布局时是否需要适应窗口
+   * Refresh the layout according to the current data and update to the canvas. Used to refresh the view after changing data.
+   * @param {boolean} fitView Whether to adapt to the window when updating the layout
    */
   refreshLayout(fitView) {
     const self = this;
@@ -282,7 +282,7 @@ class TreeGraph extends Graph {
       self.get('viewController')._fitView();
     }
     if (!animate) {
-      // 如果没有动画，目前仅更新了节点的位置，刷新一下边的样式
+      // If there is no animation, only the position of the node is updated, and the style of the edge is refreshed
       self.refresh();
       self.paint();
     } else {
@@ -292,20 +292,20 @@ class TreeGraph extends Graph {
     self.emit('afterrefreshlayout', { data, layoutData });
   }
   /**
-   * 布局动画接口，用于数据更新时做节点位置更新的动画
-   * @param {object} data 更新的数据
-   * @param {function} onFrame 定义节点位置更新时如何移动
-   * @param {number} duration 动画时间
-   * @param {string} ease 指定动效
-   * @param {function} callback 动画结束的回调
-   * @param {number} delay 动画延迟执行(ms)
+   * Layout animation interface, used to animate node position update when data is updated
+   * @param {object} data updated data
+   * @param {function} onFrame defines how to move when the node position is updated
+   * @param {number} duration animation time
+   * @param {string} ease specified motion effect
+   * @param {function} callback The callback when the animation ends
+   * @param {number} delay animation delay execution (ms)
    */
   layoutAnimate(data, onFrame) {
     const self = this;
     this.setAutoPaint(false);
     const animateCfg = this.get('animateCfg');
     self.emit('beforeanimate', { data });
-    // 如果边中没有指定锚点，但是本身有锚点控制，在动画过程中保持锚点不变
+    // If no anchor point is specified in the edge, but it has anchor point control, keep the anchor point unchanged during the animation
     self.getEdges().forEach(edge => {
       const model = edge.get('model');
       if (!model.sourceAnchor) {
@@ -359,7 +359,7 @@ class TreeGraph extends Graph {
     }, animateCfg.delay);
   }
   /**
-   * 立即停止布局动画
+   * Stop layout animation immediately
    */
   stopLayoutAnimate() {
     this.get('canvas').stopAnimate();
@@ -368,8 +368,8 @@ class TreeGraph extends Graph {
   }
 
   /**
-   * 是否在布局动画
-   * @return {boolean} 是否有布局动画
+   * Is the layout animation
+   * @return {boolean} Is there a layout animation
    */
   isLayoutAnimating() {
     return this.layoutAnimating;

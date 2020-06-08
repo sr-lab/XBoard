@@ -1,6 +1,6 @@
 /**
- * @fileOverview 自定义边
- * @description 自定义边中有大量逻辑同自定义节点重复，虽然可以提取成为 mixin ，但是考虑到代码的可读性，还是单独实现。
+ * @fileOverview custom edge
+ * @description There is a lot of logic in the custom edge that is the same as the custom node. Although it can be extracted as a mixin, it is still implemented separately considering the readability of the code.
  * @author dxq613@gmail.com
  */
 
@@ -10,7 +10,7 @@ const Global = require('../global');
 const SingleShapeMixin = require('./single-shape-mixin');
 const CLS_SHAPE = 'edge-shape';
 
-// start,end 倒置，center 不变
+// start,end upside down, center unchanged
 function revertAlign(labelPosition) {
   let textAlign = labelPosition;
   if (labelPosition === 'start') {
@@ -22,7 +22,7 @@ function revertAlign(labelPosition) {
 }
 
 
-// 注册 Node 的工厂方法
+// Register Node's factory method
 Shape.registerFactory('edge', {
   defaultShapeType: 'line'
 });
@@ -30,20 +30,20 @@ Shape.registerFactory('edge', {
 const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
   itemType: 'edge',
   /**
-   * 文本的位置
+   * Location of text
    * @type {String}
    */
-  labelPosition: 'center', // start, end, center
+  labelPosition:'center', // start, end, center
   /**
-   * 文本是否跟着线自动旋转，默认 false
+   * Whether the text automatically rotates following the line, the default is false
    * @type {Boolean}
    */
   labelAutoRotate: false,
   /**
-   * 获取边的 path
-   * @internal 供扩展的边覆盖
-   * @param  {Array} points 构成边的点的集合
-   * @return {Array} 构成 path 的数组
+   * Get the path of the edge
+   * @internal for extended edge coverage
+   * @param {Array} points The set of points that make up the edge
+   * @return {Array} constitutes an array of path
    */
   getPath(points) {
     const path = [];
@@ -63,12 +63,12 @@ const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
     const startPoint = cfg.startPoint;
     const endPoint = cfg.endPoint;
     const controlPoints = this.getControlPoints(cfg);
-    let points = [ startPoint ]; // 添加起始点
-    // 添加控制点
+    let points = [startPoint ]; // Add starting point
+    // Add control point
     if (controlPoints) {
       points = points.concat(controlPoints);
     }
-    // 添加结束点
+    // Add end point
     points.push(endPoint);
     const path = this.getPath(points);
     const style = Util.mix({}, Global.defaultEdge.style, {
@@ -79,10 +79,10 @@ const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
     return style;
   },
   getLabelStyleByPosition(cfg, labelCfg, group) {
-    const labelPosition = labelCfg.position || this.labelPosition; // 文本的位置用户可以传入
+    const labelPosition = labelCfg.position || this.labelPosition; // The location of the text can be passed in by the user
     const style = {};
     const pathShape = group.findByClassName(CLS_SHAPE);
-    // 不对 pathShape 进行判空，如果线不存在，说明有问题了
+    // Do not judge the pathShape empty, if the line does not exist, it means there is a problem
     let pointPercent;
     if (labelPosition === 'start') {
       pointPercent = 0;
@@ -91,8 +91,8 @@ const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
     } else {
       pointPercent = 0.5;
     }
-    const { refX, refY } = labelCfg; // 默认的偏移量
-    // 如果两个节点重叠，线就变成了一个点，这时候label的位置，就是这个点 + 绝对偏移
+    const { refX, refY } = labelCfg; // Default offset
+    // If the two nodes overlap, the line becomes a point. At this time, the position of the label is this point + absolute offset
     if (cfg.startPoint.x === cfg.endPoint.x && cfg.startPoint.y === cfg.endPoint.y) {
       style.x = cfg.startPoint.x + refX ? refX : 0;
       style.y = cfg.endPoint.y + refY ? refY : 0;
@@ -106,13 +106,13 @@ const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
     style.textAlign = this._getTextAlign(labelPosition, offsetStyle.angle);
     return style;
   },
-  // 获取文本对齐方式
+  // Get text alignment
   _getTextAlign(labelPosition, angle) {
     let textAlign = 'center';
     if (!angle) {
       return labelPosition;
     }
-    angle = angle % (Math.PI * 2); // 取模
+    angle = angle % (Math.PI * 2); // Modulus
     if (labelPosition !== 'center') {
       if ((angle >= 0 && angle <= Math.PI / 2) || (angle >= 3 / 2 * Math.PI && angle < 2 * Math.PI)) {
         textAlign = labelPosition;
@@ -123,27 +123,27 @@ const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
     return textAlign;
   },
   /**
-   * @internal 获取边的控制点
-   * @param  {Object} cfg 边的配置项
-   * @return {Array} 控制点的数组
+   * @internal Get the control point of the edge
+   * Configuration items at @param {Object} cfg
+   * @return {Array} Array of control points
    */
   getControlPoints(cfg) {
     return cfg.controlPoints;
   },
   /**
-   * @internal 处理需要重计算点和边的情况
-   * @param {Object} cfg 边的配置项
-   * @return {Object} 边的配置项
+   * @internal handles cases where points and edges need to be recalculated
+   * Configuration items at @param {Object} cfg
+   * @return {Object} side configuration item
    */
   getPathPoints(cfg) {
     return cfg;
   },
   /**
-   * 绘制边
+   * Draw edge
    * @override
-   * @param  {Object} cfg   边的配置项
-   * @param  {G.Group} group 边的容器
-   * @return {G.Shape} 图形
+   * Configuration items at @param {Object} cfg
+   * @param {G.Group} group side container
+   * @return {G.Shape} graphics
    */
   drawShape(cfg, group) {
     const shapeStyle = this.getShapeStyle(cfg);
@@ -155,10 +155,10 @@ const singleEdgeDefinition = Util.mix({}, SingleShapeMixin, {
   }
 });
 
-// 直线
+// straight line
 Shape.registerEdge('single-line', singleEdgeDefinition);
 
-// 直线, 不支持控制点
+// Straight line, does not support control points
 Shape.registerEdge('line', {
   // 控制点不生效
   getControlPoints() {
@@ -166,10 +166,10 @@ Shape.registerEdge('line', {
   }
 }, 'single-line');
 
-// 折线，支持多个控制点
+// Polyline, support multiple control points
 Shape.registerEdge('polyline', {}, 'single-line');
 
-// 直线
+// straight line
 Shape.registerEdge('spline', {
   getPath(points) {
     const path = Util.getSpline(points);
@@ -178,10 +178,10 @@ Shape.registerEdge('spline', {
 }, 'single-line');
 
 Shape.registerEdge('quadratic', {
-  curvePosition: 0.5, // 弯曲的默认位置
-  curveOffset: -20, // 弯曲度，沿着startPoint, endPoint 的垂直向量（顺时针）方向，距离线的距离，距离越大越弯曲
+  curvePosition: 0.5, // Bending default position
+  curveOffset: -20, // The degree of curvature, along the vertical vector (clockwise) direction of startPoint, endPoint, the distance from the line, the greater the distance, the more curved
   getControlPoints(cfg) {
-    let controlPoints = cfg.controlPoints; // 指定controlPoints
+    let controlPoints = cfg.controlPoints; // Specify controlPoints
     if (!controlPoints || !controlPoints.length) {
       const { startPoint, endPoint } = cfg;
       const innerPoint = Util.getControlPoint(startPoint, endPoint, this.curvePosition, this.curveOffset);
@@ -201,7 +201,7 @@ Shape.registerEdge('cubic', {
   curvePosition: [ 1 / 2, 1 / 2 ],
   curveOffset: [ -20, 20 ],
   getControlPoints(cfg) {
-    let controlPoints = cfg.controlPoints; // 指定controlPoints
+    let controlPoints = cfg.controlPoints; // Specify controlPoints
     if (!controlPoints || !controlPoints.length) {
       const { startPoint, endPoint } = cfg;
       const innerPoint1 = Util.getControlPoint(startPoint, endPoint, this.curvePosition[0], this.curveOffset[0]);
@@ -218,7 +218,7 @@ Shape.registerEdge('cubic', {
   }
 }, 'single-line');
 
-// 垂直方向的三阶贝塞尔曲线，不再考虑用户外部传入的控制点
+// The third-order Bezier curve in the vertical direction, no longer considers the control points passed in from outside the user
 Shape.registerEdge('cubic-vertical', {
   curvePosition: [ 1 / 2, 1 / 2 ],
   getControlPoints(cfg) {
@@ -236,7 +236,7 @@ Shape.registerEdge('cubic-vertical', {
   }
 }, 'cubic');
 
-// 水平方向的三阶贝塞尔曲线，不再考虑用户外部传入的控制点
+// The third-order Bezier curve in the horizontal direction, no longer considers the control points passed in from outside the user
 Shape.registerEdge('cubic-horizontal', {
   curvePosition: [ 1 / 2, 1 / 2 ],
   getControlPoints(cfg) {

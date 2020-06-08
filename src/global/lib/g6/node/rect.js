@@ -13,14 +13,14 @@ export default {
     setState (name, value, item) {
       // 设置锚点激活
       utils.setAnchorActive(name, value, item)
-      // 设置shapeControl激活
+      // Set shapeControl activation
       utils.setShapeControlActive(name, value, item)
     },
-    // 绘制后附加锚点
+    // Attach anchor points after drawing
     afterDraw (cfg, group) {
-      // 绘制锚点
+      // Draw anchor
       utils.drawAnchor(cfg, group)
-      // 绘制shapeControl
+      // Draw shapeControl
       utils.drawShapeControl(cfg, group)
     }
   }

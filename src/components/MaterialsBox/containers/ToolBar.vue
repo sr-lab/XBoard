@@ -49,7 +49,7 @@
     <template v-for="(type, typeIndex) in Object.keys(toolMap)">
       <ToolBox :key="typeIndex" :class="type">
         <template v-for="(item, index) in toolMap[type].filter(target => target.enable)">
-          <!-- 颜色 -->
+          <!-- colour -->
           <ToolItem
             v-if="['fill', 'lineColor'].includes(item.name)"
             :key="'tool_' + type + '_item_' + index"
@@ -84,7 +84,7 @@
               </template>
             </template>
           </ToolItem>
-          <!-- 下拉 -->
+          <!-- drop down -->
           <ToolItem
             v-else-if="item.children"
             :key="'tool_' + type + '_item_' + index"
@@ -168,9 +168,9 @@
     },
     data () {
       return {
-        // 模式
-        mode: 'edit',
-        // 选中的值
+        // mode
+        mode:'edit',
+        // selected value
         selected: {
           lineWidth: 0,
           lineType: 0,
@@ -305,9 +305,9 @@
               enable: true,
               disabled: _t.mode === 'preview',
               divider: false,
-              // 默认选中项index
+              // The default selection index
               selected: _t.selected.lineWidth,
-              // 子节点
+              // child nodes
               children: [
                 {
                   name: 1,
@@ -409,9 +409,9 @@
               enable: true,
               disabled: _t.mode === 'preview',
               divider: true,
-              // 默认选中项index
+              // The default selection index
               selected: _t.selected.lineStyle,
-              // 子节点
+              // child nodes
               children: [
                 {
                   name: 'solid',
@@ -450,9 +450,9 @@
               enable: true,
               disabled: _t.mode === 'preview',
               divider: true,
-              // 默认选中项index
+              // The default selection index
               selected: _t.selected.lineType,
-              // 子节点
+              // child nodes
               children: [
                 {
                   name: 'x-line',
@@ -491,9 +491,9 @@
               enable: true,
               disabled: _t.mode === 'preview',
               divider: true,
-              // 默认选中项index
+              // The default selection index
               selected: _t.selected.startArrow,
-              // 子节点
+              // child nodes
               children: [
                 {
                   name: 'none',
@@ -558,9 +558,9 @@
               enable: true,
               disabled: _t.mode === 'preview',
               divider: true,
-              // 默认选中项index
+              // The default selection index
               selected: _t.selected.endArrow,
-              // 子节点
+              // child nodes
               children: [
                 {
                   name: 'none',

@@ -5,7 +5,7 @@
  */
 
 const shapeControl = {
-  // 控制器
+  // Controller
   controllers: [
     [0, 0, 'nwse-resize'],
     // [0, 0.5, 'ew-resize'],
@@ -16,7 +16,7 @@ const shapeControl = {
     // [1, 0.5, 'ew-resize'],
     [1, 1, 'nwse-resize']
   ],
-  // 旋转
+  // Spin
   rotate: true
 }
 
@@ -27,7 +27,7 @@ export default [
     enable: true,
     width: 40,
     height: 40,
-    // 锚点
+    // Anchor
     anchorPoints: [ [0.5, 0], [0.5, 1], [0, 0.5], [1, 0.5] ],
     shapeControl: shapeControl
   },

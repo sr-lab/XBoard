@@ -181,7 +181,7 @@
     methods: {
       init () {
         let _t = this
-        // 触发分类点击，默认选中“全部”
+        // Trigger category click, default select "All"
         _t.handleCategoryClick('all')
       },
       handleCategoryClick (name) {

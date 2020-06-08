@@ -69,7 +69,7 @@ class View {
     }
     if (item) {
       const matrix = item.get('group').getMatrix();
-      // 用实际位置而不是model中的x,y,防止由于拖拽等的交互导致model的x,y并不是当前的x,y
+      // Use the actual position instead of x, y in the model to prevent the x, y of the model from being caused by interactions such as drag and drop, not the current x, y
       this.focusPoint({ x: matrix[6], y: matrix[7] });
     }
   }

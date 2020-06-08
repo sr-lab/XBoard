@@ -2,9 +2,9 @@ const Util = require('../util');
 const Behavior = {};
 
 /**
- * 注册行为的方法
- * @param {string} type 行为类型，外部引用指定必须，不要与已有行为类型重名
- * @param {object} behavior 行为内容,包含元素详见augment内容
+ * Method of registering behavior
+ * @param {string} type Behavior type, external reference must be specified, do not duplicate the existing behavior type
+ * @param {object} behavior Behavioral content, including elements, see the details of the augmentation
  */
 Behavior.registerBehavior = function(type, behavior) {
   if (!behavior) {
@@ -24,34 +24,34 @@ Behavior.registerBehavior = function(type, behavior) {
   };
   Util.augment(base, {
     /**
-     * 是否阻止行为发生，默认不阻止
-     * @return {boolean} 返回false时不触发行为
+     * Whether to prevent the behavior from happening, not by default
+     * @return {boolean} Does not trigger behavior when returning false
      */
     shouldBegin() {
       return true;
     },
     /**
-     * 是否阻止行为更新数据，更改视图
-     * @return {boolean} 返回false时更新数据
+     * Whether to prevent behavior from updating data and changing the view
+     * @return {boolean} Update data when false
      */
     shouldUpdate() {
       return true;
     },
     /**
-     * 是否阻止行为进入终止态
-     * @return {boolean} 返回false时阻止
+     * Whether to prevent the behavior from entering the termination state
+     * @return {boolean} Block when returning false
      */
     shouldEnd() {
       return true;
     },
     /**
-     * 定义行为的事件监听handler，behavior内部会自动绑定事件。
-     * 例如： return { click: 'onClick' }, 内部会监听graph的click事件，触发this.onClick
+     * The event listener that defines the behavior, the behavior will automatically bind the event internally.
+     * 例如： return { click: 'onClick' }, Internally, the click event of the graph will be monitored to trigger this.onClick
      */
     getEvents() {},
     /**
-     * 绑定事件，默认绑定getEvents返回事件，不需要复写
-     * @param {object} graph 画布实例
+     * Bind events, bind getEvents return events by default, no need to overwrite
+     * @param {object} graph canvas example
      */
     bind(graph) {
       const events = this._events;
@@ -61,8 +61,8 @@ Behavior.registerBehavior = function(type, behavior) {
       });
     },
     /**
-     * 解绑事件，多用于切换行为模式，默认解绑getEvents返回事件，复写bind时需要同时复写unbind
-     * @param {object} graph 画布实例
+     * Unbind events are mostly used to switch behavior modes. By default, unbind getEvents returns events. When rewriting bind, you need to rewrite unbind at the same time.
+     * @param {object} graph canvas example
      */
     unbind(graph) {
       const events = this._events;
@@ -78,7 +78,7 @@ Behavior.registerBehavior = function(type, behavior) {
       return this;
     },
     /**
-     * 定义自定义行为的默认参数，会与用户传入的参数进行合并
+     * Define the default parameters of the custom behavior, which will be merged with the parameters passed by the user
      */
     getDefaultCfg() {}
   }, behavior);

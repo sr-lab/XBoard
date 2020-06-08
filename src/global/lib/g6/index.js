@@ -1,11 +1,11 @@
 /**
  * Created by OXOYO on 2019/7/3.
  *
- * 封装G6
+ * Package G6
  */
 
 // import G6 from '@antv/g6'
-// FIXME 调用G6源码，便于调试
+// FIXME Call G6 source code for easy debugging
 import G6 from './G6'
 import registerBehavior from './behavior/index'
 import registerEdge from './edge/index'
@@ -13,14 +13,14 @@ import registerNode from './node/index'
 
 import config from './config/index'
 
-// 挂载config
+// Mount config
 G6.$C = config
 
-// 注册交互
+// Register interaction
 registerBehavior(G6)
-// 注册边
+// register side
 registerEdge(G6)
-// 注册节点
+// Register node
 registerNode(G6)
 
 export default G6

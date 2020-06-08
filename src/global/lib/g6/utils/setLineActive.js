@@ -13,15 +13,15 @@ export default function (name, value, item) {
     let group = item.getContainer()
     let children = group.get('children')
     let line = children[0]
-    // 处理线条状态
+    // Handle line status
     if (line) {
       if (value) {
         line.attr(config.line.style.active)
-        // 绘制线条动画
+        // Draw line animation
         drawLineAnimate(item.getModel(), item.getContainer())
       } else {
         line.attr(config.line.style.inactive)
-        // 销毁线条动画
+        // Destroy line animation
         destroyLineAnimate(item.getModel(), item.getContainer())
       }
     }

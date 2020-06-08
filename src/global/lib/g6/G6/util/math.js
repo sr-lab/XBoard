@@ -7,22 +7,22 @@ const BaseUtil = require('./base');
 const tolerance = 0.001;
 const MathUtil = {
   /**
-   * 是否在区间内
-   * @param   {number}       value  值
-   * @param   {number}       min    最小值
-   * @param   {number}       max    最大值
-   * @return  {boolean}      bool   布尔
+   * Is it in the interval
+   * @param {number} value
+   * @param {number} min minimum value
+   * @param {number} max
+   * @return {boolean} bool Boolean
    */
   isBetween(value, min, max) {
     return value >= min && value <= max;
   },
   /**
-   * 两线段交点
-   * @param  {object}  p0 第一条线段起点
-   * @param  {object}  p1 第一条线段终点
-   * @param  {object}  p2 第二条线段起点
-   * @param  {object}  p3 第二条线段终点
-   * @return {object}  交点
+   * Intersection of two line segments
+   * @param {object} p0 starting point of the first line
+   * @param {object} p1 The end of the first line
+   * @param {object} p2 starting point of the second line
+   * @param {object} p3 End of the second line
+   * @return {object} intersection
    */
   getLineIntersect(p0, p1, p2, p3) {
     const E = {
@@ -100,8 +100,8 @@ const MathUtil = {
   },
   /**
    * get point and circle inIntersect
-   * @param {Object} circle 圆点，x,y,r
-   * @param {Object} point 点 x,y
+   * @param {Object} circle Dot, x,y,r
+   * @param {Object} point x,y
    * @return {object} applied point
    */
   getCircleIntersectByPoint(circle, point) {
@@ -125,24 +125,24 @@ const MathUtil = {
   },
   /**
    * get point and ellipse inIntersect
-   * @param {Object} ellipse 椭圆 x,y,rx,ry
-   * @param {Object} point 点 x,y
+   * @param {Object} ellipse Ellipse x,y,rx,ry
+   * @param {Object} point x,y
    * @return {object} applied point
    */
   getEllispeIntersectByPoint(ellipse, point) {
-    // 计算线段 (point.x, point.y) 到 (ellipse.x, ellipse.y) 与椭圆的交点
+    // Calculate the intersection of the line segment (point.x, point.y) to (ellipse.x, ellipse.y) and the ellipse
     const a = ellipse.rx;
     const b = ellipse.ry;
     const cx = ellipse.x;
     const cy = ellipse.y;
-    // const c = Math.sqrt(a * a - b * b); // 焦距
+    // const c = Math.sqrt(a * a - b * b); // focal length
     const dx = (point.x - cx);
     const dy = (point.y - cy);
-    let angle = Math.atan2(dy / b, dx / a); // 直接通过 x,y 求夹角，求出来的范围是 -PI, PI
+    let angle = Math.atan2(dy / b, dx / a); // Find the angle directly by x,y, the range is -PI, PI
     if (angle < 0) {
-      angle += 2 * Math.PI; // 转换到 0，2PI
+      angle += 2 * Math.PI; // Convert to 0, 2PI
     }
-    // 通过参数方程求交点
+    // Find the intersection point through the parametric equation
     // const r = (b * b) / (a - c * Math.sin(angle));
     return {
       x: cx + a * Math.cos(angle),

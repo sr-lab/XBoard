@@ -1,3 +1,3 @@
-# G6源码
+# G6 source code
 
-拷贝自`G6 v3.0.5-beta.6`版本，用于开发时调试。
+Copy from `G6 v3.0.5-beta.6` version for debugging during development.

@@ -12,7 +12,7 @@ export default function (name, value, item) {
     let children = group.get('children')
     for (let i = 0, len = children.length; i < len; i++) {
       let child = children[i]
-      // 处理状态
+      // Processing status
       if (child._attrs.name === 'shapeControlPoint') {
         if (value) {
           child.attr(config.shapeControl.style.active.point)

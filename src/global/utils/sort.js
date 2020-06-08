@@ -5,7 +5,7 @@
  */
 
 export default {
-  // 按数字大小排序
+  // Sort by number
   sortByNumber: (a, b, type) => {
     if (type === 'desc') {
       return parseInt(a) < parseInt(b) ? 1 : -1

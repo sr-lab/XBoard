@@ -275,27 +275,27 @@
     data () {
       return {
         formData: {
-          // 便签标题
-          title: '',
-          // 便签内容
+          // Note title
+          title:'',
+          // Sticky note content
           content: '',
           backgroundColor: '#FFE66E'
         },
         dragConfig: {
-          // 拖拽配置
+          // Drag and drop configuration
           drag: {
-            // 是否启用拖拽
+            // Whether to enable drag and drop
             enable: true,
-            // 指定拖拽把手元素，支持一个或多个把手
+            // Specify drag handle element, support one or more handles
             handler: ['.note-pad-title'],
-            // 拖拽不同阶段 className
+            // Drag and drop at different stages className
             class: {
               start: 'x-drag-start',
               move: 'x-drag-move',
               done: 'x-drag-done',
               main: 'x-drag'
             },
-            // 回调
+            // Callback
             callback: {
               start: null,
               move: null,
@@ -304,11 +304,11 @@
               }
             }
           },
-          // 缩放配置
+          // Zoom configuration
           resize: {
-            // 是否启用缩放
+            // Whether to enable zoom
             enable: true,
-            // 指定缩放把手元素，支持一个或多个把手
+            // Specify zoom handle element, support one or more handles
             handler: {
               'top-left': '.resize-top-left',
               'top-right': '.resize-top-right',
@@ -319,14 +319,14 @@
               'bottom-border': '.resize-bottom-border',
               'left-border': '.resize-left-border'
             },
-            // 缩放不同阶段 className
+            // Scaling different stages className
             class: {
               start: 'x-resize-start',
               move: 'x-resize-move',
               done: 'x-resize-done',
               main: 'x-resize'
             },
-            // 回调
+            // Callback
             callback: {
               start: null,
               move: null,
@@ -394,7 +394,7 @@
         }
         switch (name) {
           case 'backgroundColor':
-            // 显示颜色选择器
+            // Show color picker
             _t.showColorPicker = true
             break
           case 'close':

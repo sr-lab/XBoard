@@ -1,28 +1,28 @@
 /**
  * Created by OXOYO on 2019/8/7.
  *
- * TODO 折线寻径
+ * TODO Polyline
  *
- * 文档：https://www.yuque.com/antv/blog/eyi70n
+ * Doc：https://www.yuque.com/antv/blog/eyi70n
  */
 
-// 折线寻径
+// Polyline
 export const polylineFinding = function (sNode, tNode, sPort, tPort, offset = 10) {
   const sourceBBox = sNode && sNode.getBBox ? sNode.getBBox() : getPointBBox(sPort)
   const targetBBox = tNode && tNode.getBBox ? tNode.getBBox() : getPointBBox(tPort)
-  // 获取节点带 offset 的区域（扩展区域）
+  // Get the node offset area (extended area)
   const sBBox = getExpandedBBox(sourceBBox, offset)
   const tBBox = getExpandedBBox(targetBBox, offset)
-  // 获取扩展区域上的起始和终止连接点
+  // Get start and end connection points on extended area
   const sPoint = getExpandedPort(sBBox, sPort, offset)
   const tPoint = getExpandedPort(tBBox, tPort, offset)
-  // 获取合法折点集
+  // Get legal vertex set
   let points = getConnectablePoints(sBBox, tBBox, sPoint, tPoint)
-  // 过滤合法点集，预处理、剪枝等
+  // Filter legal point sets, preprocessing, pruning, etc.
   filterConnectablePoints(points, sBBox)
-  // 过滤合法点集，预处理、剪枝等
+  // Filter legal point sets, preprocessing, pruning, etc.
   filterConnectablePoints(points, tBBox)
-  // 用 A-Star 算法寻径
+  // Path finding with A-Star algorithm
   let polylinePoints = AStar(points, sPoint, tPoint, sBBox, tBBox)
   return polylinePoints
 }
@@ -31,7 +31,7 @@ const getPointBBox = function (t) {
   return { centerX: t.x, centerY: t.y, minX: t.x, minY: t.y, maxX: t.x, maxY: t.y, height: 0, width: 0 }
 }
 
-// 获取扩展区域
+// Get extended area
 const getExpandedBBox = function (bbox, offset) {
   return bbox.width === 0 && bbox.height === 0 ? bbox : {
     centerX: bbox.centerX,
@@ -45,9 +45,9 @@ const getExpandedBBox = function (bbox, offset) {
   }
 }
 
-// 获取扩展区域上的连接点
+// Get the connection point on the extended area
 const getExpandedPort = function (bbox, point) {
-  // 判断连接点在上下左右哪个区域，相应地给 x 或 y 加上或者减去 offset
+  // Determine which area of ​​the connection point is up, down, left and right, and add or subtract the offset to x or y accordingly
   if (Math.abs(point.x - bbox.centerX) / bbox.width > Math.abs(point.y - bbox.centerY) / bbox.height) {
     return {
       x: point.x > bbox.centerX ? bbox.maxX : bbox.minX,
@@ -61,7 +61,7 @@ const getExpandedPort = function (bbox, point) {
   }
 }
 
-// 获取合法折点集合
+// Get legal vertex set
 const getConnectablePoints = function (sBBox, tBBox, sPoint, tPoint) {
   let lineBBox = getBBoxFromVertexes(sPoint, tPoint)
   let outerBBox = combineBBoxes(sBBox, tBBox)
@@ -72,7 +72,7 @@ const getConnectablePoints = function (sBBox, tBBox, sPoint, tPoint) {
   const centerPoint = { x: outerBBox.centerX, y: outerBBox.centerY }
   let bboxes = [ outerBBox, sBBox, tBBox, lineBBox ]
   for (let bbox in bboxes) {
-    // 包含 bbox 延长线和线段的相交线
+    // Intersect line containing bbox extension line and line segment
     points.push(crossPointsByLineAndBBox(bbox, centerPoint))
   }
   return points
@@ -143,7 +143,7 @@ const crossPointsByLineAndBBox = function (bbox, centerPoint) {
   return crossPoints
 }
 
-// 过滤连接点
+// Filter connection points
 const filterConnectablePoints = function (points, bbox) {
   return points.filter(point => {
     return point.x <= bbox.minX || point.x >= bbox.maxX || point.y <= bbox.minY || point.y >= bbox.maxY
@@ -170,7 +170,7 @@ const getCost = function (p1, p2) {
   return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y)
 }
 
-// aStar 寻径
+// aStar Pathfinder
 const AStar = function (points, sPoint, tPoint, sBBox, tBBox) {
   const openList = [sPoint]
   const closeList = []
@@ -216,7 +216,7 @@ const AStar = function (points, sPoint, tPoint, sBBox, tBBox) {
         p.g = currentG
         let h = getCost(p, tPoint)
         if (crossBBox([tBBox], p, tPoint)) {
-          // 如果穿过bbox则增加该点的预估代价为bbox周长的一半
+          // If you cross the bbox, the estimated cost of increasing this point is half of the perimeter of the bbox
           h += (tBBox.width / 2 + tBBox.height / 2)
         }
         p.h = h

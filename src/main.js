@@ -20,14 +20,14 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import './assets/styles/main.less'
 
-// Vue 全局配置
+// Vue Global configuration
 let isDev = process && process.env.NODE_ENV !== 'production'
 Vue.config.debug = isDev
 Vue.config.devtools = isDev
 Vue.config.productionTip = isDev
 Vue.config.performance = isDev
 
-// 挂载 $X 命名空间
+// Mount the $X namespace
 Vue.prototype.$X = {
   isDev,
   utils,
@@ -35,15 +35,16 @@ Vue.prototype.$X = {
   Cookies
 }
 
-// i18n实例
+// i18n instance
 const i18nInstance = i18n(Vue, 'zh-cn')
-// 注册拖拽插件
+
+// Register drag and drop plugin
 Vue.use(XDrag)
-// 注册quill编辑器
+// Register quill editor
 Vue.use(VueQuillEditor)
 Quill.register('modules/imageDrop', ImageDrop)
 Quill.register('modules/imageResize', ImageResize)
-// 注册全局组件
+// Register global components
 Vue.use(components)
 
 new Vue({

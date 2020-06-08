@@ -35,7 +35,7 @@
           </FormItem>
         </div>
       </CardItem>
-      <!-- 节点样式 -->
+      <!-- Node style -->
       <CardItem title="节点样式" :enableFold="true">
         <div class="form-item-block">
           <FormItem label="fill">
@@ -81,7 +81,7 @@
           </FormItem>
         </div>
       </CardItem>
-      <!-- 文本样式 -->
+      <!-- Text style -->
       <CardItem title="文本配置" :enableFold="true">
         <div class="form-item-block">
           <FormItem label="label">
@@ -137,9 +137,9 @@
           // }
         },
         fieldMap: {
-          // 启用字段
+          // Enable field
           enabled: [],
-          // 禁用字段
+          // disable field
           disabled: ['anchorPoints', 'shapeControl', 'size'],
           common: [
             {
@@ -272,7 +272,7 @@
           ..._t.formData,
           size: [ _t.formData.width, _t.formData.height ]
         }
-        // 广播事件
+        //
         _t.$X.utils.bus.$emit('board/materials/editor/currentItem/update', {
           type: _t.currentItem.type,
           id: _t.currentItem.model.id,

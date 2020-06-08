@@ -29,11 +29,11 @@
   // import SignaturePad from 'signature_pad'
   import SignaturePad from '@/global/lib/signature_pad.js'
 
-  // 擦除
+  // Erase
   SignaturePad.prototype.eraser = function () {
     this._ctx.globalCompositeOperation = 'destination-out'
   }
-  // 画
+  // painting
   SignaturePad.prototype.draw = function () {
     this._ctx.globalCompositeOperation = 'source-over'
   }
@@ -60,7 +60,7 @@
         cacheImages: [],
         signatureData: '',
         onResizeHandler: null,
-        // 默认配置
+        // default allocation
         defOptions: {
           dotSize: 1,
           minWidth: 1 * 0.3,
@@ -73,14 +73,14 @@
           onBegin: () => {},
           onEnd: () => {}
         },
-        // 透明图片
+        // Transparent picture
         transparentPng: {
           src:
             'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
           x: 0,
           y: 0
         },
-        // 图片类型
+        // Picture type
         imageTypes: ['image/png', 'image/jpeg', 'image/svg+xml']
       }
     },
@@ -105,7 +105,7 @@
         let _t = this
         if (_t.signaturePad && key) {
           _t.signaturePad[key] = val
-          // 更新padOption
+          // Update padOption
           _t.$store.commit('board/signaturePad/options/update', {
             index: _t.activeBoardIndex,
             data: {
@@ -127,7 +127,7 @@
         _t.signatureData = _t.transparentPng
         _t.signaturePad.fromData(data)
       },
-      // 保存
+      // save
       save () {
         let _t = this
         if (!_t.imageTypes.includes(_t.saveType)) {
@@ -147,7 +147,7 @@
           }
         }
       },
-      // 撤销
+      // Undo
       undo () {
         let _t = this
         let data = _t.signaturePad.toData()
@@ -163,7 +163,7 @@
           return _t.signaturePad.fromData(data)
         }
       },
-      // 撤回
+      // redo
       redo () {
         let _t = this
         let data = _t.signaturePad.toData()
@@ -179,49 +179,49 @@
           ])
         }
       },
-      // 将签名图像作为点组数组返回
+      // Return the signed image as an array of point groups
       toData () {
         return this.signaturePad.toData()
       },
-      // 从点组数组中绘制签名图像
+      // Draw signature image from point group array
       fromData (data) {
         return this.signaturePad.fromData(data)
       },
-      // 将签名图像作为 DataURL 返回
+      // Return the signed image as DataURL
       toDataURL (type) {
         return this.signaturePad.toDataURL(type)
       },
-      // 从 DataURL 中绘制签名图像
+      // Draw signature image from DataURL
       fromDataURL (data) {
         return this.signaturePad.fromDataURL(data)
       },
-      // 画
+      // draw
       draw () {
         this.signaturePad.draw()
       },
-      // 清除画布
+      // Clear canvas
       clear () {
         this.signaturePad.clear()
       },
-      // 擦除
+      // Erase
       eraser () {
         this.signaturePad.eraser()
       },
-      // 解除绑定所有事件处理程序
+      // Unbind all event handlers
       off () {
         return this.signaturePad.off()
       },
-      // 重新绑定所有事件处理程序
+      // Rebind all event handlers
       on () {
         return this.signaturePad.on()
       },
-      // 如果canvas为空，则返回true，否则返回false
+      // True if the canvas is empty, false otherwise
       isEmpty () {
         return this.signaturePad.isEmpty()
       },
       handleOnBegin () {
         let _t = this
-        // 清空撤销历史
+        // Clear undo history
         _t.$store.commit('board/signaturePad/undoHistory/update', {
           index: _t.activeBoardIndex,
           data: []
@@ -229,16 +229,16 @@
       },
       handlePad (newVal, oldVal) {
         let _t = this
-        // 更新旧画板
+        // Update old artboard
         if (_t.boardList[oldVal]) {
           _t.$store.commit('board/signaturePad/data/update', {
             index: oldVal,
             data: _t.toData()
           })
         }
-        // 更新当前画板
+        // Update the current artboard
         if (_t.boardList[newVal]) {
-          // 更新options
+          // update options
           let padOptions = _t.boardList[newVal].signaturePad.options
           let keys = Object.keys(padOptions)
           for (let i = 0, len = keys.length; i < len; i++) {
@@ -246,7 +246,7 @@
             let val = padOptions[key]
             _t.setOption(key, val)
           }
-          // 清除画布
+          // Clear canvas
           _t.clear()
           _t.fromData(_t.boardList[newVal].signaturePad.data)
         }
@@ -255,26 +255,26 @@
     mounted () {
       let _t = this
       let canvas = _t.$refs.padCanvas
-      // 创建画板实例
+      // Create an artboard instance
       _t.signaturePad = new SignaturePad(canvas, {
         ..._t.defOptions,
         ..._t.options,
         onBegin: _t.handleOnBegin
       })
 
-      // 绑定resize事件
+      // Bind resize event
       _t.onResizeHandler = _t.resizeCanvas.bind(_t)
       window.addEventListener('resize', _t.onResizeHandler, false)
-      // 触发resize事件
+      // Trigger resize event
       _t.resizeCanvas()
-      // 监听事件
+      // Monitor events
       _t.$X.utils.bus.$on('board/list/remove', function () {
         _t.handlePad(0)
       })
     },
     beforeDestroy () {
       let _t = this
-      // 解绑resize事件
+      // Untie resize event
       if (_t.onResizeHandler) {
         window.removeEventListener('resize', _t.onResizeHandler, false)
       }

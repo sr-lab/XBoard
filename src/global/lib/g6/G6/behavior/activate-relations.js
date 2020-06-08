@@ -1,7 +1,7 @@
 module.exports = {
   getDefaultCfg() {
     return {
-      trigger: 'mouseenter',         // 可选 mouseenter || click
+      trigger: 'mouseenter',         // Optional mouseenter || click
       activeState: 'active',
       inactiveState: 'inactive',
       shouldUpdate() { return true; }

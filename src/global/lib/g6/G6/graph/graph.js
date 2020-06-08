@@ -49,7 +49,7 @@ class Graph extends EventEmitter {
        */
       mode: [],
       /**
-       * 注册插件
+       * Register plugin
        */
       plugins: [],
       /**
@@ -109,29 +109,29 @@ class Graph extends EventEmitter {
        */
       itemMap: {},
       /**
-       * 边直接连接到节点的中心，不再考虑锚点
+       * The edge is directly connected to the center of the node, and the anchor point is no longer considered
        * @type {Boolean}
        */
       linkCenter: false,
       /**
-       * 默认的节点配置，data 上定义的配置会覆盖这些配置。例如：
+       * The default node configuration, the configuration defined on the data will override these configurations. E.g:
        * defaultNode: {
-       *  shape: 'rect',
-       *  size: [60, 40]
-       * }
-       * 若数据项为 { id: 'node', x: 100, y: 100 }
-       * 实际创建的节点模型是 { id: 'node', x: 100, y: 100， shape: 'rect', size: [60, 40] }
-       * 若数据项为 { id: 'node', x: 100, y: 100, shape: 'circle' }
-       * 实际创建的节点模型是 { id: 'node', x: 100, y: 100， shape: 'circle', size: [60, 40] }
+       * shape:'rect',
+       * size: [60, 40]
+       *}
+       * If the data item is {id:'node', x: 100, y: 100}
+       * The actual node model created is {id:'node', x: 100, y: 100, shape:'rect', size: [60, 40]}
+       * If the data item is {id:'node', x: 100, y: 100, shape:'circle'}
+       * The actual node model created is {id:'node', x: 100, y: 100, shape:'circle', size: [60, 40]}
        */
       defaultNode: {},
       /**
-       * 默认边配置，data 上定义的配置会覆盖这些配置。用法同 defaultNode
+       * The default side configuration, the configuration defined on the data will override these configurations. Same usage as defaultNode
        */
       defaultEdge: {},
       /**
-       * 节点默认样式，也可以添加状态样式
-       * 例如：
+       * Default style of node, you can also add status style
+       * E.g:
        * const graph = new G6.Graph({
        *  nodeStyle: {
        *    default: { fill: '#fff' },
@@ -144,35 +144,35 @@ class Graph extends EventEmitter {
        */
       nodeStyle: {},
       /**
-       * 边默认样式，用法同nodeStyle
+       * The default style of the edge, the usage is the same as nodeStyle
        */
       edgeStyle: {},
       /**
-       * graph 状态
+       * graph state
        */
       states: {},
       /**
-       * 是否启用全局动画
+       * Whether to enable global animation
        * @type {Boolean}
        */
       animate: false,
       /**
-       * 动画设置,仅在 animate 为 true 时有效
+       * Animation settings, only valid when animate is true
        * @type {Object}
        */
       animateCfg: {
         /**
-         * 帧回调函数，用于自定义节点运动路径，为空时线性运动
+         * Frame callback function, used to customize node motion path, space-time linear motion
          * @type {Function|null}
          */
         onFrame: null,
         /**
-         * 动画时长(ms)
+         * Animation duration (ms)
          * @type {Number}
          */
         duration: 500,
         /**
-         * 指定动画动效
+         * Specify animation effects
          * @type {String}
          */
         easing: 'easeLinear'
@@ -247,28 +247,28 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 更新元素
-   * @param {string|object} item 元素id或元素实例
-   * @param {object} cfg 需要更新的数据
+   * Update elements
+   * @param {string|object} item element id or element instance
+   * @param {object} cfg The data to be updated
    */
   update(item, cfg) {
     this.updateItem(item, cfg);
   }
 
   /**
-   * 更新元素
-   * @param {string|object} item 元素id或元素实例
-   * @param {object} cfg 需要更新的数据
+   * Update elements
+   * @param {string|object} item element id or element instance
+   * @param {object} cfg The data to be updated
    */
   updateItem(item, cfg) {
     this.get('itemController').updateItem(item, cfg);
   }
 
   /**
-   * 设置元素状态
-   * @param {string|object} item 元素id或元素实例
-   * @param {string} state 状态
-   * @param {boolean} enabled 是否启用状态
+   * Set element status
+   * @param {string|object} item element id or element instance
+   * @param {string} state
+   * @param {boolean} enabled is enabled
    */
   setItemState(item, state, enabled) {
     if (Util.isString(item)) {
@@ -279,9 +279,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 清理元素多个状态
-   * @param {string|object} item 元素id或元素实例
-   * @param {Array|String|null} states 状态
+   * Clean up multiple states of elements
+   * @param {string|object} item element id or element instance
+   * @param {Array|String|null} states
    */
   clearItemStates(item, states) {
     if (Util.isString(item)) {
@@ -295,67 +295,67 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 新增元素
-   * @param {string} type 元素类型(node | edge)
-   * @param {object} model 元素数据模型
-   * @return {object} 元素实例
+   * New elements
+   * @param {string} type element type (node ​​| edge)
+   * @param {object} model element data model
+   * @return {object} element instance
    */
   add(type, model) {
     return this.addItem(type, model);
   }
 
   /**
-   * 新增元素
-   * @param {string} type 元素类型(node | edge)
-   * @param {object} model 元素数据模型
-   * @return {object} 元素实例
+   * New elements
+   * @param {string} type element type (node ​​| edge)
+   * @param {object} model element data model
+   * @return {object} element instance
    */
   addItem(type, model) {
     return this.get('itemController').addItem(type, model);
   }
 
   /**
-   * 删除元素
-   * @param {string|object} item 元素id或元素实例
+   * Delete element
+   * @param {string|object} item element id or element instance
    */
   remove(item) {
     this.removeItem(item);
   }
 
   /**
-   * 删除元素
-   * @param {string|object} item 元素id或元素实例
+   * Delete element
+   * @param {string|object} item element id or element instance
    */
   removeItem(item) {
     this.get('itemController').removeItem(item);
   }
 
   /**
-   * 设置视图初始化数据
-   * @param {object} data 初始化数据
+   * Set view initialization data
+   * @param {object} data initialization data
    */
   data(data) {
     this.set('data', data);
   }
 
   /**
-   * 设置各个节点样式，以及在各种状态下节点 keyShape 的样式。
-   * 若是自定义节点切在各种状态下
-   * graph.node(node => {
-   *  return {
-   *    default: {
-   *      fill: 'red',
-   *      opacity: 1
-   *    },
-   *    selected: {
-   *      style: {
-   *        fill: 'blue',
-   *        opacity: 0.2
-   *      }
-   *    }
-   *  }
+   * Set the style of each node and the style of node keyShape in various states.
+   * If it is a custom node cut in various states
+   * graph.node(node ​​=> {
+   * return {
+   * default: {
+   * fill:'red',
+   * opacity: 1
+   * },
+   * selected: {
+   * style: {
+   * fill:'blue',
+   * opacity: 0.2
+   *}
+   *}
+   *}
    * });
-   * @param {function} nodeFn 指定每个节点样式
+   * @param {function} nodeFn specifies each node style
    */
   node(nodeFn) {
     if (typeof nodeFn === 'function') {
@@ -364,8 +364,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 设置各个边样式
-   * @param {function} edgeFn 指定每个边的样式,用法同 node
+   * Set each side style
+   * @param {function} edgeFn specifies the style of each edge, the usage is the same as node
    */
   edge(edgeFn) {
     if (typeof edgeFn === 'function') {
@@ -374,15 +374,15 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 刷新元素
-   * @param {string|object} item 元素id或元素实例
+   * Refresh elements
+   * @param {string|object} item element id or element instance
    */
   refreshItem(item) {
     this.get('itemController').refreshItem(item);
   }
 
   /**
-   * 当源数据在外部发生变更时，根据新数据刷新视图。但是不刷新节点位置
+   * When the source data changes externally, the view is refreshed based on the new data. But does not refresh the node position
    */
   refresh() {
     const self = this;
@@ -407,7 +407,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 当节点位置在外部发生改变时，刷新所有节点位置，重计算边
+   * When the node position changes externally, refresh all node positions and recalculate edges
    */
   refreshPositions() {
     const self = this;
@@ -427,7 +427,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 根据data接口的数据渲染视图
+   * Render the view according to the data of the data interface
    */
   render() {
     const self = this;
@@ -454,8 +454,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 接收数据进行渲染
-   * @Param {Object} data 初始化数据
+   * Receive data for rendering
+   * @Param {Object} data initialization data
    */
   read(data) {
     this.data(data);
@@ -463,8 +463,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 更改源数据，根据新数据重新渲染视图
-   * @param {object} data 源数据
+   * Change the source data and re-render the view based on the new data
+   * @param {object} data source data
    * @return {object} this
    */
   changeData(data) {
@@ -523,7 +523,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 仅画布重新绘制
+   * Canvas repaint only
    */
   paint() {
     this.emit('beforepaint');
@@ -532,8 +532,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 自动重绘
-   * @internal 仅供内部更新机制调用，外部根据需求调用 render 或 paint 接口
+   * Automatic redraw
+   * @internal is only for internal update mechanism call, external call render or paint interface as required
    */
   autoPaint() {
     if (this.get('autoPaint')) {
@@ -542,7 +542,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 导出图数据
+   * Export graph data
    * @return {object} data
    */
   save() {
@@ -558,9 +558,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 改变画布大小
-   * @param  {number} width  画布宽度
-   * @param  {number} height 画布高度
+   * Change the canvas size
+   * @param {number} width canvas width
+   * @param {number} height canvas height
    * @return {object} this
    */
   changeSize(width, height) {
@@ -570,9 +570,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 平移画布
-   * @param {number} dx 水平方向位移
-   * @param {number} dy 垂直方向位移
+   * Pan canvas
+   * @param {number} dx horizontal displacement
+   * @param {number} dy vertical displacement
    */
   translate(dx, dy) {
     const group = this.get('group');
@@ -582,9 +582,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 平移画布到某点
-   * @param {number} x 水平坐标
-   * @param {number} y 垂直坐标
+   * Pan the canvas to a certain point
+   * @param {number} x horizontal coordinate
+   * @param {number} y vertical coordinate
    */
   moveTo(x, y) {
     const group = this.get('group');
@@ -594,8 +594,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 调整视口适应视图
-   * @param {object} padding 四周围边距
+   * Adjust the viewport to fit the view
+   * @param {object} padding margin around
    */
   fitView(padding) {
     if (padding) {
@@ -606,9 +606,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 新增行为
-   * @param {string|array} behaviors 添加的行为
-   * @param {string|array} modes 添加到对应的模式
+   * New behavior
+   * @param {string|array} behaviors added behavior
+   * @param {string|array} modes added to the corresponding mode
    * @return {object} this
    */
   addBehaviors(behaviors, modes) {
@@ -617,9 +617,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 移除行为
-   * @param {string|array} behaviors 移除的行为
-   * @param {string|array} modes 从指定的模式中移除
+   * Remove behavior
+   * @param {string|array} behaviors removed behavior
+   * @param {string|array} modes removed from the specified mode
    * @return {object} this
    */
   removeBehaviors(behaviors, modes) {
@@ -628,8 +628,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 切换行为模式
-   * @param {string} mode 指定模式
+   * Switch behavior mode
+   * @param {string} mode specifies the mode
    * @return {object} this
    */
   setMode(mode) {
@@ -639,41 +639,41 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 获取当前的行为模式
-   * @return {string} 当前行为模式
+   * Get the current behavior mode
+   * @return {string} Current behavior mode
    */
   getCurrentMode() {
     return this.get('mode');
   }
 
   /**
-   * 获取当前视口伸缩比例
-   * @return {number} 比例
+   * Get the current viewport scaling ratio
+   * @return {number} ratio
    */
   getZoom() {
     return this.get('group').getMatrix()[0];
   }
 
   /**
-   * 获取当前图中所有节点的item实例
-   * @return {array} item数组
+   * Get item instances of all nodes in the current graph
+   * @return {array} item array
    */
   getNodes() {
     return this.get('nodes');
   }
 
   /**
-   * 获取当前图中所有边的item实例
-   * @return {array} item数组
+   * Get item instances of all edges in the current graph
+   * @return {array} item array
    */
   getEdges() {
     return this.get('edges');
   }
 
   /**
-   * 伸缩视口
-   * @param {number} ratio 伸缩比例
-   * @param {object} center 以center的x, y坐标为中心缩放
+   * Telescopic viewport
+   * @param {number} ratio
+   * @param {object} center zoom with center x, y coordinates as the center
    */
   zoom(ratio, center) {
     const matrix = Util.clone(this.get('group').getMatrix());
@@ -698,9 +698,9 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 伸缩视口到一固定比例
-   * @param {number} toRatio 伸缩比例
-   * @param {object} center 以center的x, y坐标为中心缩放
+   * Scale the viewport to a fixed ratio
+   * @param {number} toRatio scaling ratio
+   * @param {object} center zoom with center x, y coordinates as the center
    */
   zoomTo(toRatio, center) {
     const ratio = toRatio / this.getZoom();
@@ -708,7 +708,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 根据 graph 上的 animateCfg 进行视图中节点位置动画接口
+   * Animate the node position in the view according to the animateCfg on the graph
    */
   positionsAnimate() {
     const self = this;
@@ -775,8 +775,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 将元素移动到视口中心
-   * @param {string|object} item 指定元素
+   * Move the element to the center of the viewport
+   * @param {string|object} item specified element
    */
   focusItem(item) {
     this.get('viewController').focus(item);
@@ -784,75 +784,75 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 将屏幕坐标转换为视口坐标
-   * @param {number} clientX 屏幕x坐标
-   * @param {number} clientY 屏幕y坐标
-   * @return {object} 视口坐标
+   * Convert screen coordinates to viewport coordinates
+   * @param {number} clientX screen x coordinate
+   * @param {number} clientY screen y coordinate
+   * @return {object} viewport coordinates
    */
   getPointByClient(clientX, clientY) {
     return this.get('viewController').getPointByClient(clientX, clientY);
   }
 
   /**
-   * 将视口坐标转换为屏幕坐标
-   * @param {number} x 视口x坐标
-   * @param {number} y 视口y坐标
-   * @return {object} 视口坐标
+   * Convert viewport coordinates to screen coordinates
+   * @param {number} x viewport x coordinate
+   * @param {number} y viewport y coordinate
+   * @return {object} viewport coordinates
    */
   getClientByPoint(x, y) {
     return this.get('viewController').getClientByPoint(x, y);
   }
 
   /**
-   * 将画布坐标转换为视口坐标
-   * @param {number} canvasX 屏幕x坐标
-   * @param {number} canvasY 屏幕y坐标
-   * @return {object} 视口坐标
+   * Convert canvas coordinates to viewport coordinates
+   * @param {number} canvasX screen x coordinate
+   * @param {number} canvasY screen y coordinate
+   * @return {object} viewport coordinates
    */
   getPointByCanvas(canvasX, canvasY) {
     return this.get('viewController').getPointByCanvas(canvasX, canvasY);
   }
 
   /**
-   * 将视口坐标转换为画布坐标
-   * @param {number} x 屏幕x坐标
-   * @param {number} y 屏幕y坐标
-   * @return {object} 画布坐标
+   * Convert viewport coordinates to canvas coordinates
+   * @param {number} x screen x coordinate
+   * @param {number} y screen y coordinate
+   * @return {object} canvas coordinates
    */
   getCanvasByPoint(x, y) {
     return this.get('viewController').getCanvasByPoint(x, y);
   }
 
   /**
-   * 显示元素
-   * @param {string|object} item 指定元素
+   * Display elements
+   * @param {string|object} item specified element
    */
   showItem(item) {
     this.get('itemController').changeItemVisibility(item, true);
   }
 
   /**
-   * 隐藏元素
-   * @param {string|object} item 指定元素
+   * Hidden elements
+   * @param {string|object} item specified element
    */
   hideItem(item) {
     this.get('itemController').changeItemVisibility(item, false);
   }
 
   /**
-   * 查找对应id的元素
-   * @param {string} id 元素id
-   * @return {object} 元素实例
+   * Find the element corresponding to id
+   * @param {string} id element id
+   * @return {object} element instance
    */
   findById(id) {
     return this.get('itemMap')[id];
   }
 
   /**
-   * 根据对应规则查找单个元素
-   * @param {string} type 元素类型(node|edge)
-   * @param {string} fn 指定规则
-   * @return {object} 元素实例
+   * Find a single element according to the corresponding rule
+   * @param {string} type element type (node|edge)
+   * @param {string} fn specified rule
+   * @return {object} element instance
    */
   find(type, fn) {
     let result;
@@ -867,10 +867,10 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 查找所有满足规则的元素
-   * @param {string} type 元素类型(node|edge)
-   * @param {string} fn 指定规则
-   * @return {array} 元素实例
+   * Find all elements that meet the rule
+   * @param {string} type element type (node|edge)
+   * @param {string} fn specified rule
+   * @return {array} element instance
    */
   findAll(type, fn) {
     const result = [];
@@ -883,10 +883,10 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 查找所有处于指定状态的元素
-   * @param {string} type 元素类型(node|edge)
-   * @param {string} state z状态
-   * @return {object} 元素实例
+   * Find all elements in a specified state
+   * @param {string} type element type (node|edge)
+   * @param {string} state z state
+   * @return {object} element instance
    */
   findAllByState(type, state) {
     return this.findAll(type, item => {
@@ -895,16 +895,16 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 设置是否在更新/刷新后自动重绘
-   * @param {boolean} auto 自动重绘
+   * Set whether to redraw automatically after update/refresh
+   * @param {boolean} auto redraw automatically
    */
   setAutoPaint(auto) {
     this.set('autoPaint', auto);
   }
 
   /**
-   * 返回图表的 dataUrl 用于生成图片
-   * @return {string/Object} 图片 dataURL
+   * The dataUrl that returns the chart is used to generate pictures
+   * @return {string/Object} picture dataURL
    */
   toDataURL() {
     const canvas = this.get('canvas');
@@ -927,8 +927,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 画布导出图片
-   * @param {String} name 图片的名称
+   * Canvas export pictures
+   * @param {String} name The name of the picture
    */
   downloadImage(name) {
     const self = this;
@@ -973,8 +973,8 @@ class Graph extends EventEmitter {
 
 
   /**
-   * 添加插件
-   * @param {object} plugin 插件实例
+   * Add plugin
+   * @param {object} plugin example
    */
   addPlugin(plugin) {
     const self = this;
@@ -986,8 +986,8 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 添加插件
-   * @param {object} plugin 插件实例
+   * Remove plugin
+   * @param {object} plugin example
    */
   removePlugin(plugin) {
     const plugins = this.get('plugins');
@@ -999,7 +999,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 清除画布元素
+   * Clear canvas elements
    * @return {object} this
    */
   clear() {
@@ -1011,7 +1011,7 @@ class Graph extends EventEmitter {
   }
 
   /**
-   * 销毁画布
+   * Destroy the canvas
    */
   destroy() {
     this.clear();

@@ -9,7 +9,7 @@ export default function (cfg, group) {
   if (anchorPoints && anchorPoints.length) {
     for (let i = 0, len = anchorPoints.length; i < len; i++) {
       let [x, y] = anchorPoints[i]
-      // 计算Marker中心点坐标
+      // Calculate Marker center point coordinates
       let originX = -width / 2
       let originY = -height / 2
       let anchorX = x * width + originX

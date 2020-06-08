@@ -45,7 +45,7 @@ export default {
       let _t = this
       if (_t.currentNode && _t.currentTarget) {
         let nodeModel = _t.currentNode.getModel()
-        // 判断位置
+        // Determine location
         let targetAttrs = _t.currentTarget._attrs
         let position = targetAttrs.position
         let attrs = {
@@ -56,7 +56,7 @@ export default {
         let width = nodeModel.width
         let height = nodeModel.height
         if (position) {
-          // 参照点，及当前contoller的对角点
+          // Reference point, and the diagonal point of the current contoller
           let referencePoint = {}
           if (position.x === 0) {
             if (position.y === 0) {
@@ -64,10 +64,10 @@ export default {
                 x: _t.startPoint.x + width / 2,
                 y: _t.startPoint.y + height / 2
               }
-              // 计算宽、高
+              // Calculate width and height
               attrs.size[0] = Math.abs(referencePoint.x - event.x)
               attrs.size[1] = Math.abs(referencePoint.y - event.y)
-              // 计算中心点坐标
+              // Calculate the coordinates of the center point
               attrs.x = event.x + attrs.size[0] / 2
               attrs.y = event.y + attrs.size[1] / 2
             } else if (position.y === 1) {
@@ -75,10 +75,10 @@ export default {
                 x: _t.startPoint.x + width / 2,
                 y: _t.startPoint.y - height / 2
               }
-              // 计算宽、高
+              // Calculate width and height
               attrs.size[0] = Math.abs(referencePoint.x - event.x)
               attrs.size[1] = Math.abs(referencePoint.y - event.y)
-              // 计算中心点坐标
+              // Calculate the coordinates of the center point
               attrs.x = event.x + attrs.size[0] / 2
               attrs.y = event.y - attrs.size[1] / 2
             }
@@ -88,10 +88,10 @@ export default {
                 x: _t.startPoint.x - width / 2,
                 y: _t.startPoint.y + height / 2
               }
-              // 计算宽、高
+              // Calculate width and height
               attrs.size[0] = Math.abs(referencePoint.x - event.x)
               attrs.size[1] = Math.abs(referencePoint.y - event.y)
-              // 计算中心点坐标
+              // Calculate the coordinates of the center point
               attrs.x = event.x - attrs.size[0] / 2
               attrs.y = event.y + attrs.size[1] / 2
             } else if (position.y === 1) {
@@ -99,10 +99,10 @@ export default {
                 x: _t.startPoint.x - width / 2,
                 y: _t.startPoint.y - height / 2
               }
-              // 计算宽、高
+              // Calculate width and height
               attrs.size[0] = Math.abs(referencePoint.x - event.x)
               attrs.size[1] = Math.abs(referencePoint.y - event.y)
-              // 计算中心点坐标
+              // Calculate the coordinates of the center point
               attrs.x = event.x - attrs.size[0] / 2
               attrs.y = event.y - attrs.size[1] / 2
             }
@@ -111,22 +111,22 @@ export default {
         if (attrs.size[0] < _t.minWidth || attrs.size[1] < _t.minHeight) {
           return
         }
-        // 当前节点容器
+        // Current node container
         let group = _t.currentNode.getContainer()
-        // 更新锚点
+        // Update anchor
         utils.updateAnchor({
           ..._t.currentNode.getModel(),
           width: attrs.size[0],
           height: attrs.size[1]
         }, group)
-        // 更新shapeControl
+        // Update shapeControl
         utils.updateShapeControl({
           ..._t.currentNode.getModel(),
           width: attrs.size[0],
           height: attrs.size[1]
         }, group)
         _t.currentNode.update(attrs)
-        // 绘制
+        // draw
         _t.graph.paint()
       }
     },
